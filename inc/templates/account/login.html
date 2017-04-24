@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="container login-wrap">
+        <div class="panel panel-info login-form">
+           <h3>Login to <i>rtb.cat</i></h3>
+            <form role="form" ng-submit="doLogin()">
+                <alert></alert>
+                <div class="panel-body">
+                    <div class="divider"></div>
+                    <label>EMAIL ADDRESS</label>
+                    <div class="row">
+                        <input ng-model="user.email" type="email" class="form-control input-lg" placeholder="Enter your email address" required autofocus>
+                    </div>
+                    <label>PASSWORD</label>
+                    <div class="row">
+                        <input ng-model="user.password" type="password" class="form-control input-lg" placeholder="Enter your password" required>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">LOGIN</button>
+                </div>
+                <div class="divider"></div>
+                <div class="panel-footer">
+                    <a href="#login/forgot">FORGOT PASSWORD?</a>
+                    or
+                    <a href="#signup">SIGN UP</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

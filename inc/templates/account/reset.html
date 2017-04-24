@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="container login-wrap">
+        <div class="panel panel-info login-form">
+            <h3>Reset Your Password</h3>
+            <form ng-submit="resetPassword()">
+                <div class="panel-body">
+                    <label>EMAIL</label>
+                    <div class="row">
+                        <input ng-model="email" type="text" class="form-control input-lg">
+                    </div>
+                    <label>Reset Key</label>
+                    <div class="row">
+                        <input ng-model="key" required type="text" class="form-control input-lg">
+                    </div>
+                    <label>New Password</label>
+                    <div class="row">
+                        <input ng-model="pw1" required type="password" class="form-control input-lg" placeholder="New Password">
+                    </div>
+                    <div class="row">
+                        <input ng-model="pw2" required type="password" class="form-control input-lg" placeholder="Type Again">
+                    </div>
+                    <button ng-show="state === 0" class="btn btn-lg btn-primary" type="submit">SUBMIT</button>
+                    <button ng-show="state === 1" class="btn btn-lg btn-info">
+                        Processing.. <i class="fa fa-spin fa-spinner"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

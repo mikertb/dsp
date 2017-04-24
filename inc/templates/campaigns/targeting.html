@@ -1,0 +1,208 @@
+<div ng-controller="campaignTargetingController">
+<form name="tform" ng-model-options="{ getterSetter: true }" novalidate>
+
+	<div class="panel panel-default sbi-new-rule first">
+		<div class="panel-heading">NEW RULE</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-sm-8 no-padding-left">
+					<label>Rule Name</label>
+					<input ng-model="rule.name" type="text"
+					       class="form-control input-lg"
+					       placeholder="Name" />
+				</div>
+				<div class="form-group col-sm-4 no-padding-right">
+					<label>Bid Amount</label>
+					<button type="button" class="btn btn-help thelp"
+						data-toggle="tooltip" data-placement="top"
+						title="A bid amount of 0 denotes that if the condition
+						set of the rule are met, that the bid should be ignored.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input ng-model="rule.bid" type="number"
+						       class="form-control input-lg"
+						       placeholder="Amount" min="0" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<label>New Condition</label>
+				<button type="button" class="btn btn-help thelp"
+					data-toggle="tooltip" data-placement="top"
+					title="Each condition is grouped into a logical AND
+					where each condition must be `true` for the bid price
+					to be modified. A condition may have a logical OR
+					sibling where either the first condition or the sibling
+					condition must be `true`. Conditions are considered siblings
+					when they reference the same field in the same rule.">
+					<i class="fa fa-question"></i>
+				</button>
+				<div class="input-group-sm">
+					<div class="form-group col-md-5 no-padding-x">
+						<div class="input-group">
+							<select class="form-control input-sm input-group-addon"
+								style="background-color:white"
+								data-placeholder="Field"
+								ng-model="cond.field"
+								ng-change="onCondFieldChange()"
+								ng-options="key as field.text for (key, field)
+									    in fields track by field.code">
+							</select>
+							<span class="input-group-addon"
+							      ng-show="cond.field().length">is</span>
+							<select class="form-control input-sm input-group-addon"
+								style="background-color:white"
+								ng-show="cond.field().length"
+								ng-model="cond.type"
+								ng-options="condOpSyms[oper] for oper in
+									    fields[cond.field()].ops
+									    track by oper">
+							</select>
+						</div>
+					</div>
+					<div class="form-group col-md-7 no-padding-x sbi-value-chosen-fix" ng-show="cond.type().length">
+						<div class="input-group">
+							<select class="form-control"
+								ng-model="cond.value"
+								data-placeholder="Select Value"
+								ng-options="val for val in fieldValues"
+								chosen>
+							</select>
+							<div class="input-group-addon input-validation no-padding-y">
+								<button ng-click="addCondition()" class="btn btn-md btn-success">
+									<i class="fa fa-plus"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 no-padding-x">
+					<div class="well well-sm" ng-show="rule.conditions().length">
+						<label>Conditions</label>
+						<div class="sbi-list-container">
+							<div ng-repeat="c in rule.conditions()"
+							     class="input-group input-group-sm sbi-criteria">
+								<input type="text" class="form-control input-sm"
+								       style="border-right:0;background-color:white;"
+								       size="{{ fieldText(c.field()).length }}"
+								       value="{{ fieldText(c.field()) }}"
+								       disabled>
+								<span class="input-group-addon">is</span>
+								<input type="text" class="form-control input-sm"
+								       style="border-right:0;background-color:white;"
+								       size="{{ condOpSyms[c.type()].length }}"
+								       value="{{ condOpSyms[c.type()] }}"
+								       disabled>
+								<input type="text" class="form-control input-sm"
+								       style="background-color:white;"
+								       size="{{ c.value().length }}"
+								       value="{{ c.value() }}"
+								       disabled>
+								<span class="btn btn-default input-group-addon" ng-click="deleteCond(c)">
+									<i class="fa fa-trash"></i>
+								</span>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 no-padding-x">
+					<button ng-click="addRule()" style="margin-top: 10px;"
+						class="btn btn-primary">
+						Save Rule
+					</button>
+					<button ng-click="clearRule()" style="margin-top: 10px;"
+						class="btn btn-default">
+						Reset Rule
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<fieldset class="sbi-rule-list" id="sbi_container">
+		<legend>Current Rules</legend>
+		<div class="panel-group" id="accordion">
+			<ul data-as-sortable="sortable" ng-model="rulez" style="padding: 0;">
+				<li ng-repeat="rule in rules" data-as-sortable-item>
+					<div class="panel panel-default" data-as-sortable-item-handle>
+						<button ng-click="deleteRule(rule)" type="button" class="close"
+							style="margin: 10px; 15px 0 0; font-size: 24px;">
+							&times;
+						</button>
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="accordion"
+								   href="{{location}}#rule-{{$index}}">
+									{{rule.name()}}
+									<label class="label" ng-class="{ 'label-success': rule.bid() > 0,  'label-danger': rule.bid() == 0  }">
+										${{ rule.bid() | number : 2 }}
+									</label>
+									<button class="btn btn-default btn-xs pull-right" ng-click="editRule(rule)">Edit</button>
+								</a>
+							</h4>
+						</div>
+						<div id="rule-{{$index}}" class="panel-collapse collapse" style="padding: 10px;">
+							<div class="panel-body well-sm sbi-list-container">
+								<div ng-repeat="c in rule.conditions()"
+								     class="input-group input-group-sm sbi-rule sbi-criteria">
+									<input type="text" class="form-control input-sm"
+									       style="border-right:0;background-color:white;"
+									       size="{{ fieldText(c.field()).length }}"
+									       value="{{ fieldText(c.field()) }}"
+									       disabled>
+									<span class="input-group-addon">is</span>
+									<input type="text" class="form-control input-sm"
+									       style="border-right:0;background-color:white;"
+									       size="{{ condOpSyms[c.type()].length }}"
+									       value="{{ condOpSyms[c.type()] }}"
+									       disabled>
+									<input type="text" class="form-control input-sm"
+									       style="background-color:white;"
+									       size="{{ c.value().length }}"
+									       value="{{ c.value() }}"
+									       disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="as-sortable-item">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="accordion"
+									href="{{location}}#rule-default">
+									Default Bid
+									<label class="label" ng-class="{ 'label-success': campaign.model.default_bid > 0,  'label-danger': campaign.model.default_bid == 0  }">
+										${{ campaign.model.default_bid | number : 2 }}
+									</label>
+								</a>
+							</h4>
+						</div>
+						<div id="rule-default" class="panel-collapse collapse" style="padding: 10px;">
+							<div class="panel-body well-sm sbi-list-container">
+								The default bid will apply to all traffic that does not match any targeting rules above
+							</div>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+			<div ng-hide="rules.length">
+				No existing rules.
+			</div>
+		</div>
+	</fieldset>
+
+</form>
+</div>

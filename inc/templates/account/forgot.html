@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="container login-wrap">
+        <div class="panel panel-info login-form">
+            <h3>Reset Your Password</h3>
+            <form ng-submit="resetKey()">
+                <div class="panel-body">
+                    <div ng-show="state === 2" class="alert alert-info">
+                        Please check your e-mail for a reset link.
+                    </div>
+                    <label>EMAIL</label>
+                    <div class="row">
+                        <input ng-model="email" type="text" class="form-control input-lg">
+                    </div>
+                    <button ng-show="state === 0" class="btn btn-lg btn-primary" type="submit">SUBMIT</button>
+                    <button ng-show="state === 1" class="btn btn-lg btn-info">
+                        Processing.. <i class="fa fa-spin fa-spinner"></i>
+                    </button>
+                    <button ng-show="state === 2" type="button" class="btn btn-default btn-lg">Resend Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="support-title">
+            Ticket #{{ ticket.id }}: <span>{{ ticket.subject }}</span>
+            <span class="badge">{{ ticket.state }}</span>
+        </div>
+        <div class="support-log" ng-repeat="reply in replies">
+            <div class="support-entry">
+                <div class="support-header"
+                    ng-class="{ 'support-us': reply.is_staff, 'support-user': !reply.is_staff }">
+                    {{ reply.name }}
+                    <span class="support-time pull-right">{{ reply.timestamp | date }}</span>
+                </div>
+                <div class="support-text">
+                    <pre>{{ reply.content }}</pre>
+                </div>
+            </div>
+        </div>
+        <div class="support-respond">
+            <textarea ng-model="reply.content" rows="5" class="form-control" placeholder="Respond here"></textarea>
+            <button ng-click="reply()" class="btn btn-primary">Respond</button>
+            <button ng-show="ticket.status != 3" ng-click="close()" class="btn btn-info"><i class="fa fa-thumbs-o-up"></i> Mark Resolved</button>
+        </div>
+    </div>
+</div>

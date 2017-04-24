@@ -1,0 +1,194 @@
+<div ng-controller="accountProfileController" ng-model-options="{ getterSetter: true }">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    My Details
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" ng-click="updateProfile()">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="firstName"
+                                       class="col-sm-2 control-label">
+                                    First Name
+                                </label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control"
+                                           id="firstName" placeholder="First Name"
+                                           ng-model="user.details().firstName">
+                                </div>
+                                <label for="lastName"
+                                       class="col-sm-1 control-label">
+                                    Last
+                                </label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control"
+                                           id="lastName" placeholder="Last Name"
+                                           ng-model="user.details().lastName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">
+                                Company
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       id="company"
+                                       placeholder="Company Name If Applicable"
+                                       ng-model="user.details().company">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">
+                                    E-mail
+                                </label>
+                                <div class="col-sm-5">
+                                    <input type="email" class="form-control"
+                                           id="email" placeholder="my@email.com"
+                                           ng-model="user.email">
+                                </div>
+                                <label for="phone" class="col-sm-1 control-label">
+                                    Phone
+                                </label>
+                                <div class="col-sm-3">
+                                    <input type="phone" class="form-control"
+                                           id="phone" placeholder="x-xxx-xxxx"
+                                           ng-model="user.details().phone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="address1"
+                                       class="col-sm-2 control-label">
+                                    Address 1
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control"
+                                           id="address1" placeholder="Address"
+                                           ng-model="user.details().address1">
+                                </div>
+                                <label for="address2"
+                                       class="col-sm-1 control-label">
+                                    Apt/Ste
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control"
+                                           id="address2" placeholder="Suite, Apt"
+                                           ng-model="user.details().aptSuite">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="country"
+                                       class="col-sm-2 control-label">
+                                    Country
+                                </label>
+                                <div class="col-sm-2">
+                                    <select id="country" ng-model="user.details().country"
+                                            class="form-control" data-placeholder="Select Country"
+                                            ng-options="v as v for (v, k) in countries"
+                                            chosen>
+                                    </select>
+                                </div>
+                                <label for="city" class="col-sm-1 control-label">
+                                    City
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control"
+                                           id="city" placeholder="City"
+                                           ng-model="user.details().city">
+                                </div>
+                                <label for="state" class="col-sm-1 control-label">
+                                    State
+                                </label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control"
+                                           id="state" placeholder="State"
+                                           ng-model="user.details().state">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-1 col-sm-10">
+                                <button type="submit" class="btn btn-primary">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Change Password
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form"
+                          ng-submit="updatePassword()" ng-hide="$parent.userId">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    Current Password
+                                </label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control"
+                                           ng-model="pass.current" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    New Password
+                                </label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control"
+                                           placeholder="New Password"
+                                           ng-model="pass.first" required>
+                                </div>
+                                <label class="col-sm-1 control-label">
+                                    Retype
+                                </label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control"
+                                           placeholder="New Password"
+                                           ng-model="pass.second" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <button type="submit" class="btn btn-primary">
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal" role="form"
+                          ng-submit="resetPassword()">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <button type="submit" class="btn btn-info">
+                                        Reset Password
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,251 @@
+<div ng-controller="campaignCreativesController">
+<form name="aform" ng-model-options="{ getterSetter: true }" novalidate>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">NEW CREATIVE</div>
+		<div class="panel-body">
+			<div class="row">
+				<fieldset class="col-md-6">
+					<legend><i class="fa fa-file-image-o"></i> Image Ads</legend>
+					<div class="well well-sm campaign-ads-upload-drag-form"
+					     ng-file-drag-over-class="campaign-ads-upload-drag-hover"
+					     ng-file-drop="onImageSelect($files)"
+					     ng-show="_dropSupported">
+						<span>Drag & Drop Ads Here</span>
+						<i class="fa fa-download"></i>
+					</div>
+					<div ng-file-drop-available="_dropSupported=true"
+					     ng-show="!_dropSupported">
+						HTML5 Drop File is not supported!
+					</div>
+					<label class="btn btn-success btn-file" for="adsinput"
+					       style="font-weight: initial; color: #fff">
+						Or Select Files
+					</label>
+					<input ng-model="files" style="display: none;" id="adsinput"
+					       type="file" ng-file-select="onImageSelect($files)" multiple>
+				</fieldset>
+				<fieldset class="col-md-6">
+					<legend><i class="fa fa-file-text-o"></i> Text & Tag Ads</legend>
+					<div class="form-group">
+						<div class="row" style="padding:0;">
+							<div ng-init="creativeContext.type('text')"
+							     class="col-md-4 checkbox-slider--c checkbox-slider-info">
+								<label>
+									<input data-toggle="toggle" type="checkbox" ng-click="creativeContext.htmlOrText()">
+									<span>{{ creativeContext.type() === 'text' ? 'Text' : 'HTML' }}</span>
+								</label>
+							</div>
+						</div>
+						<div class="row" style="padding: 0;">
+							<div class="col-md-7" style="padding: 0;">
+								<label for="ad-text-name">Name</label>
+								<input ng-model="creativeContext.creative().name" type="text"
+								       id="ad-text-name" class="form-control"
+								       placeholder="Name"/>
+							</div>
+						</div>
+					</div>
+					<div ng-show="creativeContext.type() === 'html'" class="form-group">
+						<div class="row" style="padding: 0;">
+							<div class="col-md-6" style="padding-left:0">
+								<div class="input-group input-group-sm">
+									<input ng-model="creativeContext.width"
+									       type="number" class="form-control input-sm"
+									       style="border-right:0"
+									       placeholder="Width" min=1>
+									<span class="input-group-addon">
+										<i class="fa fa-times"></i>
+									</span>
+									<input ng-model="creativeContext.height"
+									       type="number" class="form-control input-sm"
+									       placeholder="Height" min=1>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-show="creativeContext.type() === 'html'" class="form-group">
+						<label for="ad-text-content">Preview Image URL</label>
+						<input ng-model="creativeContext.previewUrl" type="text"
+						       class="form-control" placeholder="" />
+					</div>
+					<div class="form-group">
+						<label for="ad-text-content">Content</label>
+						<textarea ng-model="creativeContext.content"
+							  placeholder="{{ creativeContext.type() === 'html' ? 'HTML' : 'Text' }}"
+							  maxlength="2048" rows="2"
+							  id="ad-text-content" class="form-control"></textarea>
+					</div>
+					<div class="form-group" ng-show="creativeContext.type() === 'html'">
+						<div class="row">
+							<div class="col-md-8 no-padding-left">
+								<label>Creative Attributes</label>
+								<select class="form-control" data-placeholder="Select any that apply"
+									ng-model="creativeContext.creative().attrs"
+									ng-options="k as v for (v, k) in creativeAttrs"
+									chosen multiple>
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4 no-padding-right checkbox-slider--c">
+								<label>
+									<input checked data-toggle="toggle" type="checkbox"
+									       ng-model="creativeContext.mraid2"><span>MRAID 2</span>
+								</label>
+							</div>
+							<div class="col-sm-4 no-padding-right checkbox-slider--c">
+								<label>
+									<input checked data-toggle="toggle" type="checkbox"
+									       ng-model="creativeContext.secureHtml"><span>Secure Content (HTTPS)</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<button ng-click="addCreative()" class="btn btn-primary">Add</button>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+
+	<div class="campaign-ads-container" ng-show="imageCreatives.length">
+		<label for="ads-text-container">Image Creatives</label>
+		<div id="ads-text-container" class="campaign-ads-listbox">
+			<table class="table table-striped table-hover campaign-ad-table">
+				<tr>
+					<th>Name</th>
+					<th class="hidden-xs">Dimensions</th>
+					<th colspan="2">Content</th>
+				</tr>
+				<tr ng-repeat="creative in imageCreatives">
+					<td>
+						<creative-name></creative-name>
+					</td>
+					<td class="hidden-xs">
+						<span>{{ creative.image().width() }}</span>
+						<i class="fa fa-times"></i>
+						<span>{{ creative.image().height() }}</span>
+					</td>
+					<td>
+						<img ng-src="{{ resolveCreativeSrc(creative.id()) }}"
+						     class="campaign-ad-preview">
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="campaign-ads-container" ng-show="htmlCreatives.length">
+		<label for="ads-text-container">HTML Creatives</label>
+		<div id="ads-text-container" class="campaign-ads-listbox">
+			<table class="table table-striped table-hover campaign-ad-table">
+				<tr>
+					<th>Name</th>
+					<th>Dimensions</th>
+					<th>Preview URL</th>
+					<th colspan="2">Content</th>
+				</tr>
+				<tr ng-repeat="creative in htmlCreatives">
+					<td>
+						<creative-name></creative-name>
+					</td>
+					<td>
+						<span>{{ creative.html().width() }}</span>
+						<i class="fa fa-times"></i>
+						<span>{{ creative.html().height() }}</span>
+					</td>
+					<td>
+						<div class="input-group input-group-sm">
+							<a target="_blank" href="{{ creative.html().previewUrl() }}"
+							   style="border-right:1px solid #ccc"
+							   class="btn btn-default btn-wide input-group-addon">
+								{{ creative.html().previewUrl() }}
+							</a>
+						</div>
+					</td>
+					<td>
+						<textarea ng-show="htmlCreativeData[$index]"
+							  maxlength="2048" rows="2"
+							  class="form-control"
+							  disabled>{{ htmlCreativeData[$index]}}</textarea>
+						<label ng-show="!htmlCreativeData[$index]">Loading...</label>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="campaign-ads-container" ng-show="textCreatives.length">
+		<label for="ads-text-container">Text Creatives</label>
+		<div id="ads-text-container" class="campaign-ads-listbox">
+			<table class="table table-striped table-hover campaign-ad-table">
+				<tr>
+					<th>Name</th>
+					<th colspan="2">Content</th>
+				</tr>
+				<tr ng-repeat="creative in textCreatives">
+					<td>
+						<creative-name></creative-name>
+					</td>
+					<td>
+						<textarea maxlength="2048" rows="2"
+							  class="form-control"
+							  disabled>{{ creative.text().text() }}</textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+</form>
+
+	<div class="modal fade" id="upload-image-modal" tabindex="-1"
+	     role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Uploading Image(s)</h4>
+				</div>
+				<div class="modal-body">
+					<p ng-show="imageUpload.state == null">
+						Upload with file-name as creative name? If `No` is selected
+						for each image file, you will be prompted for a name.
+					</p>
+					<p ng-show="imageUpload.state === 'uploading'">
+						Uploading images ... {{ imageUpload.count }}/{{ imageUpload.files.length }}
+					</p>
+					<p ng-show="imageUpload.state === 'loading'">
+						Loading...
+					</p>
+					<div ng-show="imageUpload.state === 'renaming'">
+						<img ng-src="{{ imageUpload.source }}"
+						     style="max-width:400px;max-height:300px">
+						<div class="input-wrap-wide">
+							<input type="text" class="form-control input-sm"
+							       ng-model="imageUpload.name"
+							       placeholder="Creative Name" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div ng-show="imageUpload.state == null">
+						<a type="button" class="btn btn-primary"
+						   ng-click="imageUpload.uploadAll()">Yes</a>
+						<a type="button" class="btn btn-primary"
+						   ng-click="imageUpload.renameAll()">No</a>
+						<a type="button" class="btn btn-default" data-dismiss="modal"
+						   ng-click="imageUpload.cancel()">Cancel</a>
+					</div>
+					<div ng-show="imageUpload.state === 'renaming'">
+						<a type="button" class="btn btn-primary"
+						   ng-show="imageUpload.name != null && imageUpload.name.length > 0"
+						   ng-click="imageUpload.doUpload()">OK</a>
+						<a type="button" class="btn btn-primary"
+						   ng-click="imageUpload.skipUpload()">Skip</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

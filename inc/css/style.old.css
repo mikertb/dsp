@@ -1,0 +1,222 @@
+/********* RANDOM ********/
+
+/**
+ *  Bootstrap Vertical Tabs Component v1.0.0, © 2013, Ismail Demirbilek
+ *  http://github.com/dbtek/bootstrap-vertical-tabs
+ */
+.tabs-left,.tabs-right{border-bottom:0;padding-top:2px}.tabs-left{border-right:1px solid #ddd}.tabs-right{border-left:1px solid #ddd}.tabs-left>li,.tabs-right>li{float:none;margin-bottom:2px}.tabs-left>li{margin-right:-1px}.tabs-right>li{margin-left:-1px}.tabs-left>li.active>a,.tabs-left>li.active>a:focus,.tabs-left>li.active>a:hover{border-bottom-color:#ddd;border-right-color:transparent}.tabs-right>li.active>a,.tabs-right>li.active>a:focus,.tabs-right>li.active>a:hover{border-bottom:1px solid #ddd;border-left-color:transparent}.tabs-left>li>a{border-radius:4px 0 0 4px;margin-right:0;display:block}.tabs-right>li>a{border-radius:0 4px 4px 0;margin-right:0}
+
+.content {
+
+}
+
+.breadcrumb {
+    margin-bottom: 0px !important;
+    text-transform:capitalize;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-side {
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+.nav-side a {
+    color: #97a5b7;
+}
+
+.nav-side li:not(:last-child) {
+    border-bottom: 1px solid #dae1e8;
+    box-shadow: 0 2px 1px -1px #FFFFFF;
+}
+
+.nav-side li a {
+    border: none !important;
+}
+
+.nav-side ul {
+    border: none;
+}
+
+.nav-side .active a {
+    background-color: transparent !important;
+}
+
+.nav-side .active a:after {
+    content: "";
+    background-image: url('img/arrow.png');
+    position: absolute;
+    opacity: 1;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 22px;
+    right: -2px;
+    top: 25px;
+}
+
+.nav-side .active li {
+    margin-right: -1px;
+}
+
+fieldset {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+}
+
+legend {
+    border: none;
+    display: inline;
+    width: auto;
+    color: #d94f48;
+}
+
+/******* END RANDOM *********/
+
+/****** DASHBOARD *****/
+
+body {
+    background-repeat: repeat-x;
+    background-color: #ddd;
+    height: 100%;
+    font-family: "Trebuchet MS";
+    color: #374767;
+}
+.logo {
+    float: right;
+    margin-right: 100px;
+    margin-top: -65px;
+}
+.logo img {
+    height: 48px;
+}
+.wrapper {
+    width: 95%;
+    margin: auto;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 3px 0px 2px #a3a3a3;
+}
+.content {
+
+}
+.nav-main {
+    padding-top: 20px;
+    border: none;
+    margin-bottom: 10px;
+}
+.nav-main li:first-child {
+    margin-left: 20%;
+}
+.nav .fa {
+    font-size: 32px;
+}
+.nav i {
+    display: block;
+    text-align: center;
+}
+.nav-main a {
+    border-radius: 4px !important;
+    color: #ddd !important;
+    opacity: .5;
+}
+.nav-main a:hover {
+    color: #666 !important;
+    opacity: 1;
+}
+.nav-main .active a {
+    background-color: #515050 !important;
+    color: white !important;
+    border: none !important;
+    opacity: 1 !important;
+}
+.panel {
+    margin: 0;
+}
+.stats {
+    font-size: 28px;
+    text-align: center;
+}
+.stats span {
+    color: #666;
+}
+.stats .panel {
+    background-color: white;
+}
+.stat-title {
+    display: block;
+    text-align: center;
+    color: #24a9e2;
+}
+.campaign-table {
+    white-space: nowrap;
+}
+.campaign-table td, th {
+    text-align: right;
+}
+.campaign-table th:first-child, td:first-child {
+    text-align: left !important;
+}
+.campaign-title a:first-child {
+    padding-left: 2%;
+}
+.campaign-title a {
+    visibility: hidden;
+}
+.campaign-title:hover a {
+    visibility: visible;
+}
+
+
+/**************** END DASHBOARD ************/
+
+/***** CAMPAIGN *******/
+
+.campaign-panel {
+    margin-top: 20px !important;
+    background-color: #f6f7f7;
+}
+
+.campaign-panel .panel-heading {
+    background-color: #ddd;
+}
+
+.campaign-panel .row {
+    margin: 0px 25px 10px 25px !important;
+}
+
+.campaign-panel:last-of-type {
+    margin-bottom: 10px;
+}
+
+.campaign-controls {
+    margin-top: -5px;
+}
+
+/**************** END CAMPAIGN *******************/
+
+
+/************** INTELLIGENCE PLANNER **************/
+
+.intel-options {
+    display: inline-table;
+}
+
+.intel-option {
+    float: left;
+    display: inline;
+    width: auto;
+    margin-right: 25px;
+}
+
+.intel-options .form-control {
+    width: auto;
+}
+
+.intel-options .input-group {
+    margin-bottom: 10px;
+    width: auto;
+    display: inline-table;
+}
+

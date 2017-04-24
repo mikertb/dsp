@@ -1,0 +1,68 @@
+<div class="rage-bg">
+    <div class="vert-nav">
+        <ul class="nav nav-pills nav-stacked">
+            <li ng-class="hasSuPermission(permission.allUser) ? ['active'] : []"
+                ng-if="hasSuPermission(permission.allUser)">
+                <a href="/account#profile" data-toggle="tab">
+                    <i class="fa fa-user fa-3x"></i><br>
+                    Profile
+                </a>
+            </li>
+            <div class="divider" ng-if="hasSuPermission(permission.allUser)"></div>
+            <li ng-if="hasSuPermission(permission.allUserPayment)">
+                <a id="tab2" href="/account#billing" data-toggle="tab">
+                    <i class="fa fa-credit-card fa-3x text-success"></i><br>
+                    Billing
+                </a>
+            </li>
+            <div class="divider" ng-if="hasSuPermission(permission.allUserPayment)"></div>
+            <li ng-if="hasSuPermission(permission.allUserInvoice)">
+                <a id="tab3" href="/account#payments" data-toggle="tab">
+                    <i class="fa fa-list fa-3x"></i><br>
+                    Payments
+                </a>
+            </li>
+            <div class="divider"></div>
+        </ul>
+    </div>
+    <div class="edit-tab-content">
+        <div ng-class="hasSuPermission(permission.allUser) ?
+                      ['active', 'tab-pane'] : ['tab-pane']"
+             id="profile"
+             ng-if="hasSuPermission(permission.allUser)">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="settings-tab">
+                        <span class="title">PROFILE</span>
+                        <div class="spacer"></div>
+                        <div ng-include src="'inc/templates/account/profile.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="billing"
+             ng-if="hasSuPermission(permission.allUserPayment)">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="settings-tab">
+                        <span class="title">BILLING</span>
+                        <div class="spacer"></div>
+                        <div ng-include src="'inc/templates/account/billing.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="payments"
+             ng-if="hasSuPermission(permission.allUserInvoice)">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="settings-tab">
+                        <span class="title">INVOICES</span>
+                        <div class="spacer"></div>
+                        <div ng-include src="'inc/templates/account/payments.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

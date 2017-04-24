@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html ng-app="app">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>rtb.cat - Self Serve DSP</title>
+        <link rel="stylesheet" href="inc/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="inc/css/titatoggle-dist-min.css" />
+        <link rel="stylesheet" href="inc/js/vendor/chosen.css" />
+        <link rel="stylesheet" href="inc/css/chosenfix.css" />
+        <link rel="stylesheet" href="inc/js/loadingbar/loading-bar.css" />
+	    <link rel="stylesheet" href="inc/js/ngsortable/ng-sortable.min.css"/>
+	    <link rel="stylesheet" href="inc/js/ngsortable/ng-sortable.min.css"/>
+        <link rel="stylesheet" href="inc/js/datepicker/datepicker.css" />
+        <link rel="stylesheet" href="inc/js/charts/chartjs/angular-chart.min.css" />
+        <link href="inc/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="inc/css/jquery.dataTables.css">
+        <link href="inc/css/style.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    </head>
+    <body ng-controller="nav">
+        <nav class="navbar navbar-default navigation" id="navigation">
+            <div class="navbar-header visible-xs">
+                <div class="pull-left navbar-brand">
+                    <img class="logo" style="width: 150px;" src="inc/css/logo.png">
+                </div>
+                    <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#menu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="container-fluid">
+                <div class="hidden-xs">
+                    <div class="visible-sm pull-left" style="margin-left: 30px; ">
+                        <img class="logo" style="width: 100px;" src="inc/css/logo.png">
+                    </div>
+                    <div class="hidden-sm pull-right" style="margin-top: 30px;">
+                        <img class="logo" src="inc/css/logo.png">
+                    </div>
+                    <div style="clear: left;"></div>
+                </div>
+                <div class="collapse navbar-collapse pull-left" id="menu" ng-if="usrBal">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a ng-href="#home/{{suserId}}">
+                                <div class="visible-xs">Home</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('home')}">
+                                    <i class="fa fa-home fa-2x"></i><br>Home
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-href="#campaigns/{{suserId}}">
+                                <div class="visible-xs">Campaigns</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('campaign')}">
+                                    <i class="fa fa-cogs fa-2x"></i><br>Campaigns
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li ng-show="isAdmin()" ng-cloak>
+                            <a href="#admin">
+                                <div class="visible-xs">Admin</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('admin')}">
+                                    <i class="fa fa-lock fa-2x"></i><br>Admin
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#intelligence">
+                                <div class="visible-xs">Inventory</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('intelligence')}">
+                                    <i class="fa fa-globe fa-2x"></i><br>Inventory
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://rtbcat.atlassian.net/wiki/display/RCHW/own+Bidder">
+                                <div class="visible-xs">Support</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('support')}">
+                                    <i class="fa fa-ambulance fa-2x"></i><br>Support
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-href="#account/{{suserId}}">
+                                <div class="visible-xs">Account</div>
+                                <div class="nav-but hidden-xs" ng-class="{'active arrow': isActive('account')}">
+                                    <i class="fa fa-user fa-2x"></i><br>Account
+                                    <div class="triangle"></div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div id="content_">
+            <div class="container-fluid con-wrap content_" ng-cloak>
+                <ol class="breadcrumb ng-scope ng-binding" ng-bind-html="getCrumbs()"></ol>
+                <div ng-if="usrBal" class="balance pull-right"  ng-cloak>
+                    <div class="title" ng-show="usrBal.user().details().company()"
+                         ng-style="{'color': suserId ? 'red' : 'default'}">
+                        {{ usrBal.user().details().company() }}
+                    </div>
+                    <div class="title" ng-show="!usrBal.user().details().company()"
+                         ng-style="{'color': suserId ? 'red' : 'default'}">
+                        {{ usrBal.user().details().company().firstName() }}&nbsp;
+                        {{ usrBal.user().details().company().lastName() }}
+                    </div>
+                    <div class="label user-credit"
+                         ng-show="usrBal.balance() != null"
+                         ng-class="{ 'label-success':
+                                        usrBal.remainingBalance() > 1,
+                                     'label-danger': usrBal.remainingBalance() < 1 }">
+                        <sup>$</sup>
+                        <span>{{ usrBal.remainingBalance() | number : 2 }}</span>
+                    </div>
+                    <a href="#logout" ng-if="usrBal" class="btn btn-default">
+                        LOGOUT
+                    </a>
+                </div>
+                <div class="divider"></div>
+                <div class="content" ng-view="">
+                    <!-- view -->
+                </div>
+            </div>
+        </div>
+
+        <!-- footer imports -->
+        <script src="inc/js/jquery.js"></script>
+        <script src="inc/js/jquery-ui.min.js"></script>
+        <script src="inc/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.js"></script>
+        <script src="inc/js/tablesorter.js"></script>
+        <script src="inc/js/jquery.dataTables.js"></script>
+        <script src="inc/js/popover.js"></script>
+        <script src="inc/js/alertify/alertify.js"></script> <!-- alertifyjs.org -->
+        <script src="inc/js/ngupload/angular-file-upload-shim.min.js"></script>
+        <script src="inc/js/angular/angular.min.js"></script>
+        <script src="inc/js/ngupload/angular-file-upload.min.js"></script>
+        <script src="inc/js/angular/angular-route.min.js"></script>
+        <script src="inc/js/angular/angular-sanitize.min.js"></script>
+        <script src="inc/js/angular/angular-cookies.min.js"></script>
+        <script src="inc/js/angular/angular-animate.min.js"></script>
+        <script src="inc/js/loadingbar/loading-bar.js"></script>
+        <script src="inc/js/chosen.js"></script>
+        <script src="https://js.braintreegateway.com/web/3.6.3/js/client.min.js"></script>
+        <script src="https://js.braintreegateway.com/web/3.6.3/js/paypal.min.js"></script>
+        <script src="https://js.braintreegateway.com/web/3.6.3/js/data-collector.min.js"></script>
+        <script src="https://js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js"></script>
+	    <script src="inc/js/ngsortable/ng-sortable.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js"></script>
+        <script src="https://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="//code.highcharts.com/highcharts-more.js"></script>
+        <script src="//code.highcharts.com/modules/solid-gauge.js"></script>
+        <script src="inc/js/datepicker/moment.js"></script>
+        <script src="inc/js/datepicker/datepicker.js"></script>
+        <script src="/inc/js/ngdatatables/angular-datatables.js"></script>
+        <script src="/inc/js/ngdatatables/angular-datatables.directive.js"></script>
+        <script src="/inc/js/ngdatatables/angular-datatables.instances.js"></script>
+        <script src="/inc/js/ngdatatables/angular-datatables.options.js"></script>
+        <script src="inc/js/angular/angular-datatables.factory.js"></script>
+        <script src="inc/js/angular/angular-datatables.renderer.js"></script>
+        <script src="/inc/js/ngdatatables/angular-datatables.util.js"></script>
+        <script src="inc/js/angular-paginate.js"></script>
+        <script src="inc/js/app.js"></script>
+        <script type="text/javascript" data-cfasync="false">(function () { var done = false;var script = document.createElement("script");script.async = true;script.type = "text/javascript";script.src = "https://app.purechat.com/VisitorWidget/WidgetScript";document.getElementsByTagName("HEAD").item(0).appendChild(script);script.onreadystatechange = script.onload = function (e) {if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {var w = new PCWidget({ c: "ce344e84-ee36-41c3-a52f-7a0722a23bb3", f: true });done = true;}};})();</script>
+    </body>
+</html>

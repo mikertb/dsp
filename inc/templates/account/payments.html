@@ -1,0 +1,61 @@
+<div class="panel" ng-controller="accountInvoicesController">
+    <div class="panel-body" ng-show="invoices != null && invoices.length == 0">
+        No invoices to show.
+    </div>
+    <div class="panel-body" ng-show="invoices == null">
+        LOADING <i class="fa fa-gear fa-spin"></i>
+    </div>
+    <div class="panel-body" ng-show="invoices != null && invoices.length > 0">
+        <table class="table table-hover table-striped">
+            <tr>
+                <th>
+                    State
+                </th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Create Date
+                </th>
+                <th>
+                    Due Date
+                </th>
+                <th ng-if="$parent.hasSuPermission($parent.permission.allPayment)">
+                    Total Due
+                </th>
+            </tr>
+            <tr ng-repeat="invoice in invoices">
+                <th>
+                    <span class="badge">
+                        {{ invoice.state() }}
+                    </span>
+                    <i ng-if="invoice.state() == invoiceState.late ||
+                              invoice.state() == invoiceState.unpaid"
+                       class="fa fa-exclamation"
+                       style="color:rgba(233, 30, 30, 0.74)"></i>
+                </th>
+                <th>
+                    <a ng-href="#/account/invoice/{{ invoice.id() }}/{{ $parent.userId}}">
+                        {{ invoice.id() }}
+                    </a>
+                </th>
+                <th>
+                    <span ng-if="invoice.createDate()">
+                        {{ invoice.createDate().toDateString() }}
+                    </span>
+                </th>
+                <th>
+                    <span ng-if="invoice.dueDate()">
+                        {{ invoice.dueDate().toDateString() }}
+                    </span>
+                </th>
+                <th ng-if="$parent.hasSuPermission($parent.permission.allPayment)">
+                    <span>
+                        <i class="fa fa-dollar"></i>
+                        {{ invoice.total() | number : 2}}
+                    </span>
+                </th>
+            </tr>
+        </table>
+    </div>
+</div>

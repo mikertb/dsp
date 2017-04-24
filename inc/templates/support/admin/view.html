@@ -1,0 +1,22 @@
+<div class="panel">
+  <div class="panel-body">
+    <div class="support-title">
+      Ticket: <span>{{ ticket.subject }}</span>
+    </div>
+    <div class="support-log">
+      <div class="support-entry" ng-repeat="reply in ticket.replies">
+        <div ng-class="reply.customer ? 'support-user support-header' : 'support-us support-header'">
+          {{ reply.name }}
+          <span class="support-time pull-right">{{ reply.date }}</span>
+        </div>
+        <div class="support-text" ng-bind-html="reply.message">
+        </div>
+      </div>
+    </div>
+    <div class="support-respond">
+      <textarea rows="5" class="form-control" placeholder="Respond here"></textarea>
+      <button class="btn btn-primary">Respond</button>
+      <button class="btn btn-info"><i class="fa fa-thumbs-o-up"></i> Resolved</button>
+    </div>
+  </div>
+</div>

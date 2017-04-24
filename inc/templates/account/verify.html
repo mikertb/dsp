@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="container login-wrap">
+        <div class="panel panel-info login-form">
+            <h3>Verify Your <i>rtb.cat</i> Account</h3>
+            <form ng-submit="return false;">
+                <div class="panel-body">
+                    <div class="alert alert-info">
+                        Please check your e-mail for a verification link to enable your account.
+                        In case the link does not work, you may also copy and paste the key below to
+                        activate your account.
+                    </div>
+                    <label>EMAIL</label>
+                    <div class="row">
+                        <input ng-model="email" type="text" class="form-control input-lg">
+                    </div>
+                    <label>Verification Key</label>
+                    <div class="row">
+                        <input ng-model="key" required type="text" class="form-control input-lg">
+                    </div>
+                    <button ng-show="!verifying" class="btn btn-lg btn-primary" ng-click="doVerify()">VERIFY</button>
+                    <button ng-show="verifying" class="btn btn-lg btn-info">
+                        Processing.. <i class="fa fa-spin fa-spinner"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-lg" ng-click="doResend()">Resend Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

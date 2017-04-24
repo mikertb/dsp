@@ -1,0 +1,6 @@
+<div ng-show="alert.msg" class="alert alert-{{ alert.class }}" >
+	<span ng-bind-html="alert.msg"></span>
+	<button type="button" class="close" ng-click="alert = {}">
+		<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+	</button>
+</div>

@@ -1,0 +1,58 @@
+<div class="panel" ng-controller="adminCouponsController">
+	<div class="panel-body">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Create Coupon
+			</div>
+			<div class="panel-body">
+				<form ng-submit="create()">
+					<div class="row">
+						<div class="col-md-4">
+							<label>Coupon Code*</label>
+							<input class="form-control" type="text" ng-model="coupon.code">
+						</div>
+						<div class="col-md-2">
+							<label>Type*</label>
+							<select class="form-control" ng-model="coupon.type">
+								<option value="0">Fixed</option>
+								<option value="1">Percentage</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Amount*</label>
+							<input class="form-control" type="number" min="5" ng-model="coupon.amount">
+						</div>
+						<div class="col-md-3">
+							<label>Use Limit</label>
+							<input class="form-control" min="0" max="9999" type="number" ng-model="coupon.max_uses">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<label>Min Deposit*</label>
+							<input class="form-control" type="number" ng-model="coupon.min_deposit">
+						</div>
+						<div class="col-md-3">
+							<label>Max Deposit*</label>
+							<input class="form-control" type="number" ng-model="coupon.max_deposit">
+						</div>
+						<div class="col-md-3">
+							<label>Start Date</label>
+							<input class="form-control" type="number" ng-model="coupon.start_date">
+						</div>
+						<div class="col-md-3">
+							<label>End Date</label>
+							<input class="form-control" type="number" ng-model="coupon.end_date">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-1 margin-y-10">
+							<button class="btn btn-primary" type="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<table class="table table-hover table-striped" id="coupons-table"></table>
+	</div>
+</div>

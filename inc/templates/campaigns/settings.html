@@ -1,0 +1,535 @@
+<form ng-submit="save()" name="cform" ng-model-options="{ getterSetter: true }" novalidate>
+	<div class="panel panel-default first">
+		<div class="panel-heading">Campaign Information</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12 no-padding-x">
+					<label>Campaign Name</label>
+					<div class="input-group">
+						<input type="text" class="form-control input-lg"
+							   ng-model="campaign.name"
+							   placeholder="Campaign Name" required>
+						<span ng-show="campaign.name().length"
+							  class="input-group-addon input-validation input-valid">
+							<i class="fa fa-check"></i>
+						</span>
+						<span ng-show="!campaign.name() || !campaign.name().length"
+							  class="input-group-addon input-validation input-invalid">
+							<i class="fa fa-times"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 no-padding-x">
+					<label>Total Budget</label>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input type="number" class="form-control input-massive"
+							   ng-model="campaign.totalBudget"
+							   min="1" placeholder="0" required>
+						<span ng-show="campaign.totalBudget() > 0"
+							  class="input-group-addon input-validation input-valid">
+							<i class="fa fa-check"></i>
+						</span>
+						<span ng-show="!campaign.totalBudget() || campaign.totalBudget() <= 0"
+							  class="input-group-addon input-validation input-invalid">
+							<i class="fa fa-times"></i>
+						</span>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x">
+					<label>Daily Budget</label>
+					<div class="input-group">
+                                            <span class="input-group-addon">
+                                                    <i class="fa fa-dollar"></i>
+                                            </span>
+						<input type="number" class="form-control input-massive"
+							   ng-model="campaign.dailyBudget"
+							   min="1" placeholder="0" required>
+						<span ng-show="campaign.dailyBudget() <= campaign.totalBudget()"
+							  class="input-group-addon input-validation input-valid">
+                                                    <i class="fa fa-check"></i>
+                                            </span>
+						<span ng-show="!campaign.dailyBudget() || campaign.dailyBudget() <= 0 ||
+                                                           campaign.dailyBudget() > campaign.totalBudget()"
+							  class="input-group-addon input-validation input-invalid">
+                                                    <i class="fa fa-times"></i>
+                                            </span>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x">
+					<label>Placement Spend</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Set a daily spend limit for each ad spot.
+						Prevents one publisher from exhausting your daily
+						funds. Optional, 0 means no limit.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon input-currency">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input type="number" class="form-control  input-massive"
+							   ng-model="campaign.placementBudget"
+							   min="0" value="0" placeholder="0">
+						<span class="input-group-addon input-validation"></span>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x">
+					<label>Spend Pacing</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Choose whether your daily budget is spent
+                                            as quickly as possible, or if it is divided and
+                                            spent evenly through the day.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<select ng-init="campaign.pacing = 'even'"
+                                class="form-control input-massive"
+                                ng-model="campaign.spendPacing">
+							<option value="FAST">Fast</option>
+							<option value="HOURLY">Hourly</option>
+						</select>
+						<span class="input-group-addon input-validation"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 no-padding-x">
+					<label>Default Bid (CPM)</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Default CPM bid for traffic that does
+						not match a specific Smart Bid Rule">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon input-currency">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input type="text" class="form-control input-massive"
+							   ng-model="campaign.defaultBid"
+							   min="0" placeholder="1.00"
+							   ng-disabled="campaign.autoBid()">
+						<span ng-show="campaign.defaultBid() && campaign.defaultBid() <= campaign.dailyBudget()"
+							  class="input-group-addon input-validation input-valid">
+							<i class="fa fa-check"></i>
+						</span>
+						<span ng-show="!campaign.defaultBid() ||
+								   (!campaign.autoBid() && campaign.defaultBid() < 0) ||
+							       campaign.defaultBid() > campaign.dailyBudget()"
+							  class="input-group-addon input-validation input-invalid">
+							<i class="fa fa-times"></i>
+						</span>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x checkbox-slider--c">
+					<label>Auto Bid</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Default CPM bid for traffic that does
+                                            not match a specific Smart Bid Rule">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group margin-y-10">
+						<label>
+							<input checked data-toggle="toggle" type="checkbox" name="autobid"
+								   ng-model="campaign.autoBid"><span></span>
+						</label>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x">
+					<label>Frequency Cap</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Limit the number of times your ad is shown
+						to the same user per the amount of days specified in
+						frequency term. Optional, 0 is no limit.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-eye"></i>
+						</span>
+						<input type="number" class="form-control  input-massive"
+							   ng-model="campaign.frequencyCap"
+							   min="0" value="0" placeholder="0">
+						<span class="input-group-addon input-validation"></span>
+					</div>
+				</div>
+				<div class="col-md-3 no-padding-x" style="padding-left: 0;">
+					<label>Frequency Term</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="How many days long the frequency cap applies
+						to before showing ads again to the same user. The
+						recommended value is 1. Optional, 0 is no limit.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-clock-o"></i>
+						</span>
+						<input type="number" class="form-control  input-massive"
+							   ng-model="campaign.frequencyDays"
+							   min="0" placeholder="0">
+						<span class="input-group-addon input-validation"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 no-padding-x">
+					<label>Categories</label>
+					<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="Categories that describe this campaign. This is NOT targeting">
+						<i class="fa fa-question"></i>
+					</button>
+					<span class="input-group">
+						<select class="form-control" data-placeholder="Categories of this campaign"
+								ng-model="campaign.iabCats"
+								ng-options="v.toUpperCase() as k for (v, k) in iabCats"
+								chosen multiple>
+						</select>
+						<span ng-show="campaign.iabCats() != null && campaign.iabCats().length"
+							  class="input-group-addon input-validation input-valid">
+							<i class="fa fa-check"></i>
+						</span>
+						<span ng-hide="campaign.iabCats() != null && campaign.iabCats().length"
+							  class="input-group-addon input-validation input-invalid">
+							<i class="fa fa-times"></i>
+						</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<span>Destination Links</span>
+			<button type="button" class="btn btn-help thelp"
+					data-toggle="tooltip"
+					data-placement="top"
+					title="A destination link is the web page users will
+				be sent to when clicking an ad. Multiple links may be added
+				to rotate and split-test your best pages.">
+				<i class="fa fa-question"></i>
+			</button>
+			<a target="_blank" href="#/support/docs/tokens"
+			   class="btn btn-xs btn-info">
+				Tokens
+			</a>
+			<i ng-show="links.length > 0"
+			   class="fa fa-check input-valid align-right"></i>
+			<i ng-show="links.length == 0"
+			   class="fa fa-times input-invalid align-right"></i>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12 no-padding-x">
+					<a class="btn btn-success" title="New Link" data-target="#add-link-modal" data-toggle="modal">
+						Add Link
+					</a>
+				</div>
+			</div>
+			<label ng-show="links.length">Current Links</label>
+			<div ng-repeat="l in links" class="input-wrap-wide">
+				<div class="input-group">
+					<span class="input-group-addon input-group-primary">
+						{{ l.name() }}
+					</span>
+					<a target="_blank" href="{{ l.url() }}"
+					   class="btn btn-default btn-wide input-group-addon">
+						{{ l.url() }}
+					</a>
+					<div class="input-group">
+						<span class="input-group-addon input-currency">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input class="form-control input-success"
+							   ng-model="l.value()"
+							   style="width: 80px"
+							   placeholder="Value">
+					</div>
+					<span class="input-group-btn input-valid">
+						<btn class="btn btn-warning" title="Pause"
+							 ng-click="setLinkState(l, smcampaign.itemState.paused)"
+							 ng-show="l.state() === smcampaign.itemState.active">
+							<i class="fa fa-pause"></i>
+						</btn>
+						<btn class="btn btn-success" title="Activate"
+							 ng-click="setLinkState(l, smcampaign.itemState.active)"
+							 ng-show="l.state() === smcampaign.itemState.paused">
+							<i class="fa fa-play"></i>
+						</btn>
+						<btn class="btn btn-warning" title="Pending Approval"
+							 ng-show="l.state() === smcampaign.itemState.unapproved">
+							<i class="fa fa-spinner"></i>
+						</btn>
+						<a class="btn btn-danger" ng-click="deleteLink(l)"
+						   title="Delete"
+						   ng-attr-data-toggle="{{ create ? null : 'modal' }}"
+						   data-target="#delete-link-modal">x</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default ">
+		<div class="panel-heading">Global Targeting</div>
+		<div class="panel-body">
+			<div class="country-wrap">
+				<label>Countries</label>
+				<div class="country">
+					<div id="map" class="margin-y-10"  style="width: 95%; height: 400px;"></div>
+					<div class="row">
+						<div class="col-sm-12">
+							<span class="input-group">
+								<select ng-model="campaign.countries"
+										class="form-control" data-placeholder="Select Target Countries"
+										ng-options="v as v for (v, k) in countries"
+										chosen multiple>
+								</select>
+								<div class="input-group-addon input-validation">
+									<i ng-show="campaign.countries() && campaign.countries().length > 0"
+									   class="fa fa-check input-valid"></i>
+									<i ng-show="!campaign.countries() || campaign.countries().length === 0"
+									   class="fa fa-times input-invalid"></i>
+								</div>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="exchange-wrap">
+				<label>Exchanges</label>
+				<button type="button" class="btn btn-help thelp"
+						data-toggle="tooltip" data-placement="top"
+						title="Select which publisher sources to run your
+					       campaign across. View our support page
+					       for more details.">
+					<i class="fa fa-question"></i>
+				</button>
+				<div class="exchange">
+					<div class="row">
+						<div class="col-md-12 no-padding-x">
+							<span class="input-group">
+								<select class="form-control"
+										style="width: 95%"
+										ng-model="campaign.exchanges"
+										chosen multiple
+										ng-options="exchange as exchange for exchange in exchanges ">
+									<option>
+										Please select your supply sources
+									</option>
+								</select>
+								<div class="input-group-addon input-validation">
+									<i ng-show="campaign.exchanges() && campaign.exchanges().length > 0"
+									   class="fa fa-check input-valid"></i>
+										<i ng-show="!campaign.exchanges() || campaign.exchanges().length === 0"
+										   class="fa fa-times input-invalid">
+									</i>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="campaign-os">
+				<label>Phone OS</label>
+				<button type="button" class="btn btn-help thelp"
+						data-toggle="tooltip" data-placement="top"
+						title="Choose which phone OS to target.">
+					<i class="fa fa-question"></i>
+				</button>
+				<div class="row text-center">
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-lg btn-default"
+							   ng-click="campaign.os('android')"
+							   ng-class="{ 'active': campaign.os() === 'android' }">
+							<input required type="radio" ng-model="campaign.os" />
+							<i class="fa fa-android text-success"></i> Android
+						</label>
+						<label class="btn btn-lg btn-default"
+							   ng-click="campaign.os('ios')"
+							   ng-class="{ 'active': campaign.os() === 'ios' }">
+							<input required type="radio" ng-model="campaign.os" />
+							<i class="fa fa-apple text-muted"></i> iOS
+						</label>
+						<label class="btn btn-lg btn-default"
+							   ng-click="campaign.os('windows')"
+							   ng-class="{ 'active': campaign.os() === 'windows' }">
+							<input required type="radio" ng-model="campaign.os" />
+							<i class="fa fa-windows text-primary"></i> Windows
+						</label>
+						<label class="btn btn-lg btn-default"
+							   ng-click="campaign.os('desktop')"
+							   ng-class="{ 'active': campaign.os() === 'desktop' }">
+							<input required type="radio" ng-model="campaign.os" />
+							<i class="fa fa-desktop text-primary"></i> Desktop
+						</label>
+						<label class="btn btn-lg btn-default"
+							   ng-click="campaign.os('other')"
+							   ng-class="{ 'active': campaign.os() === 'other' }">
+							<input required type="radio" ng-model="campaign.os" />
+							<i class="fa fa-linux text-warning"></i> Other
+						</label>
+					</div>
+					<i ng-show="campaign.os() && campaign.os().length"
+					   class="fa fa-check input-valid"></i>
+					<i ng-show="!campaign.os() || !campaign.os().length"
+					   class="fa fa-times input-invalid"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="!cform.$valid" class="alert alert-danger">Please complete all fields</div>
+	<input type="submit" ng-disabled="!cform.$valid" class="btn btn-primary"
+		   ng-attr-value="{{ create ? 'Create' : 'Save' }}" />
+	<a class="btn btn-success" ng-click="doImportUserIds()">Import User IDs</a>
+	<a ng-hide="create" class="btn btn-success" data-toggle="tab"
+	   ng-click="changeTab('#sbi-tab')"
+	   data-target="#sbi">Targeting &raquo;</a>
+
+	<div class="modal fade" id="delete-link-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Delete Link</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Are you sure you want to remove the link
+						<i>{{ targetLink.name() }}</i>?
+					</p>
+				</div>
+				<div class="modal-footer">
+					<a type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+					<a type="button" class="btn btn-primary" data-dismiss="modal"
+					   ng-click="confirmDeleteLink()">Confirm</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade modal-lg" id="add-link-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Add New Link</h4>
+				</div>
+				<div class="modal-body">
+					<label>New Destination Link</label>
+					<div class="row">
+						<div class="col-md-5 settings-link-col">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-tag"></i>
+								</span>
+								<input type="text" class="form-control input-lg"
+									   ng-model="link.name"
+									   placeholder="*Link name (for reference only)">
+								<span class="input-group-addon input-validation">
+									<button type="button" class="btn btn-help thelp"
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Link name used in reporting">
+										<i class="fa fa-question"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+						<div class="col-md-4 settings-link-col">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-globe"></i>
+								</span>
+								<input type="text" class="form-control input-lg"
+									   ng-model="link.adomain"
+									   placeholder="*Actual adv. domain">
+								<span class="input-group-addon input-validation">
+									<button type="button" class="btn btn-help thelp"
+											data-toggle="tooltip"
+											data-placement="top"
+											title="The final domain users are sent to when clicking this link,
+										without the leading http://. In case of apps the advertiser domain should be
+										the domain for the app and not the publisher, e.g. clashofclans.com">
+										<i class="fa fa-question"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+						<div class="col-md-3 settings-link-col">
+							<div class="input-group">
+								<span class="input-group-addon input-currency">
+									<i class="fa fa-dollar"></i>
+								</span>
+								<input type="number" class="form-control input-lg"
+									   ng-model="link.value"
+									   placeholder="Conv. Value">
+								<span class="input-group-addon input-validation">
+									<button type="button" class="btn btn-help thelp"
+											data-toggle="tooltip"
+											data-placement="top"
+											title="The conversion value of this link if tracking profit/loss">
+										<i class="fa fa-question"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 settings-link-col">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-link"></i>
+								</span>
+								<input type="text" class="form-control input-lg"
+									   ng-model="link.url"
+									   placeholder="http://adv-domain.com/campaign-link?cid={impid}">
+								<span class="input-group-addon input-validation">
+									<button type="button" class="btn btn-help thelp"
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Destination users sent to when clicking an ad. Please see FAQs for
+										tokens and conversion tracking information.">
+										<i class="fa fa-question"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addLink()">
+						Save
+					</a>
+					<a type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</form>

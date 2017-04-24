@@ -1,0 +1,59 @@
+<div style="background-color: #F0F0F0; padding: 15px 0px 0px; margin: auto;" class="row stats">
+	<div class="row">
+		<div class="col-md-2" ng-repeat="s in headStats">
+			<div class="panel panel-default">
+				<div class="panel-body dash-stats">
+					<div>{{ s.text }}</div>
+					<span ng-switch="s.code">
+						<span ng-switch-when="spend">
+							${{ stats.field(s.code) || 0 | number : 2 }}
+						</span>
+						<span ng-switch-when="revenue">
+							${{ stats.field(s.code) || 0 | number : 2 }}
+						</span>
+						<span ng-switch-when="profit">
+							${{ stats.field(s.code) || 0 | number : 2 }}
+						</span>
+						<span ng-switch-when="roi">
+							{{ stats.field(s.code) || 0 | number : 0 }}%
+						</span>
+						<span ng-switch-default>{{ stats.field(s.code) || 0 | megaNumber }}</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel" style="padding: 0px 0px; margin: 10px 0px 0px;">
+	    <div class="panel-body">
+	        <div class="row">
+	            <div class="col-md-12 text-center no-padding-x">
+	                <h4>
+	                    Performance snapshot for
+						<select ng-change="load()" ng-model="timePeriod" class="form-control no-text-decoration" style="display:inline; width: initial; border: none; background-color: #eee;" ng-init="duration = 'today';">
+							<option value="day">today</option>
+							<option value="week">week</option>
+							<option value="month">month</option>
+							<option value="year">year</option>
+						</select>
+	                </h4>
+	            </div>
+			</div>
+			<div class="row">
+	            <div class="col-md-12 no-padding-x">
+					<div id="home-chart" style="height: 30%;">
+						<!-- stats graph -->
+					</div>
+					<div ng-show="!campaigns">
+						<h3 class="text-center">No Graph Data To Display</h3>
+					</div>
+				</div>
+	        </div>
+			<div class="row">
+				<div class="col-sm-12 no-padding-x">
+					<div ng-include src="'inc/templates/campaigns/campaign_listing.html'"></div>
+					<a href="#campaign/edit" class="btn btn-primary">New Campaign</a>
+				</div>
+			</div>
+	    </div>
+	</div>
+</div>

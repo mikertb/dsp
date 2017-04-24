@@ -1,0 +1,245 @@
+<div ng-controller="braintreePaymentController">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="row" ng-show="!paymentMethod && !loading">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        Select payment method
+                    </label>
+                    <div class="col-sm-3">
+                        <button class="btn btn-success"
+                                ng-click="selectPaymentMethod(creditCard)">
+                            <i class="fa fa-credit-card"></i>
+                            <span font-style="font-weight:bold">Credit Card</span>
+                        </button>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-success"
+                                ng-click="selectPaymentMethod(paypal)">
+                            <i class="fa fa-paypal"></i>
+                            <span font-style="font-weight:bold">Paypal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="paymentMethod">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary"
+                                ng-click="cancel()"
+                                ng-disabled="loading || paying">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="loading">
+                LOADING ...
+                <i class="fa fa-spinner fa-spin"></i>
+            </div>
+            <div class="row" ng-show="!loading && paymentMethod === creditCard">
+                <style>
+                    .braintree-hosted-fields-focused {
+                        border: 1px solid #0275d8;
+                        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px
+                                    rgba(102,175,233,.6);
+                    }
+
+                    .braintree-hosted-fields-focused.focused-invalid {
+                        border: 1px solid #ebcccc;
+                        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px
+                                    rgba(100,100,0,.6);
+                    }
+
+                    @media (max-width: 670px) {
+                        .form-group {
+                            width: 100%;
+                        }
+                        .btn {
+                            white-space: normal;
+                        }
+                    }
+                </style>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-xs-8 form-group">
+                            <label class="control-label">
+                                Card Number
+                                <span ng-show="creditCard.type"
+                                      style="font-style:italic">
+                                    ({{ creditCard.type }})
+                                </span>
+                            </label>
+                            <div class="form-control" id="braintree-cc-number"></div>
+                            <span class="helper-text" ng-show="creditCard.invalidNumber">
+                                Invalid credit card number.
+                            </span>
+                        </div>
+                        <div class="col-xs-4 form-group">
+                            <div class="row">
+                                <label class="control-label col-xs-12">
+                                    Expiration Date
+                                </label>
+                                <div class="col-xs-6">
+                                    <div class="form-control"
+                                         id="braintree-cc-exp-mo"></div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-control"
+                                         id="braintree-cc-exp-yr"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">
+                                Security Code (CVV)
+                            </label>
+                            <div class="form-control" id="braintree-cc-cvv"></div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">
+                                Zip/Postal Code
+                            </label>
+                            <div class="form-control" id="braintree-cc-zip"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="!loading && paymentMethod">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">
+                                Deposit Amount
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </span>
+                                <input type="number"
+                                       class="form-control"
+                                       ng-model="paymentAmount"
+                                       ng-show="invoice == null"
+                                       required>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ paymentAmount | number : 2 }}"
+                                       ng-show="invoice != null"
+                                       readonly>
+                            </div>
+                            <div class="helper-text"
+                                 ng-show="paymentAmount < 100">
+                                Minimum payment of <i class="fa fa-dollar"></i>100
+                                required.
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3"
+                             ng-show="invoice != null && paymentAmount >= 100">
+                            <label class="control-label">
+                                Processing Fee
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ (paymentAmount * (processingFee / 100)) | number : 2 }}"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3"
+                             ng-show="invoice == null && paymentAmount >= 100">
+                            <label class="control-label">
+                                Effective Credit
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ (paymentAmount - (paymentAmount * (processingFee / 100))) | number : 2 }}"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3"
+                             ng-show="invoice != null">
+                            <label class="control-label">
+                                Total Due
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ (paymentAmount + (paymentAmount * (processingFee / 100))) | number : 2 }}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="paymentMethod === creditCard">
+                        <div class="form-group col-xs-6">
+                            <button class="btn btn-success"
+                                    ng-disabled="paying ||
+                                                 (invoice == null &&
+                                                  !paymentAmount || paymentAmount < 100)"
+                                    ng-click="creditCard.pay()">
+                                <i class="fa fa-credit-card"></i>
+                                Pay
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="paymentMethod === paypal">
+                        <div class="col-xs-6">
+                            <script src="https://www.paypalobjects.com/api/button.js?"
+                                    data-merchant="braintree"
+                                    data-id="paypal-button"
+                                    data-button="checkout"
+                                    data-color="blue"
+                                    data-size="small"
+                                    data-shape="rect"
+                                    data-button_type="button"
+                                    data-button_disabled="false"
+                            ></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <ol class="text-info" style="font-size:9pt">
+                    <li>
+                        All payments are secure and PCI compliant.
+                    </li>
+                    <li>
+                        Deposits will be available upon payment clearance.
+                    </li>
+                    <li>
+                        A fee of <span style="font-style:italic">{{processingFee}}%</span>
+                        will be applied to each payment.
+                    </li>
+                    <li>
+                        Existing campaigns paused due to insufficient budget will be
+                        activated within <span style="font-style:italic">1</span>
+                        hour of payment clearance.
+                    </li>
+                    <li ng-if="invoice == null">
+                        This payment will not be attributed to any outstanding
+                        invoices you have. If you are trying to pay an existing
+                        outstanding invoice, please visit the
+                        <span style="font-style:italic">Payments</span> tab, located
+                        within your <a href="#account/">Account</a> settings page.
+                    </li>
+                </ol>
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>

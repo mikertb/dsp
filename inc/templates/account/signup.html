@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="container login-wrap">
+        <div class="panel panel-info login-form" >
+           <h3>Signup For <i>rtb.cat</i></h3>
+            <form role="form" ng-submit="doSignup()">
+                <div class="panel-body">
+                  <label>NAME</label>
+                  <div class="row">
+                      <input ng-model="form.details.first_name" type="text" class="form-control input-lg" placeholder="John" required autofocus>
+                  </div>
+                  <div class="row">
+                      <input ng-model="form.details.last_name" type="text" class="form-control input-lg" placeholder="Doe" required>
+                  </div>
+                    <label>EMAIL ADDRESS</label>
+                    <div class="row">
+                        <input ng-model="form.email" type="email" class="form-control input-lg" placeholder="im@awesome.com" required>
+                    </div>
+                    <label>PASSWORD</label>
+                    <div class="row">
+                        <input ng-model="form.password" type="password" class="form-control input-lg" placeholder="password" required>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">SUBMIT</button>
+                </div>
+                <div class="divider"></div>
+                <div class="panel-footer">
+                    HAVE AN ACCOUNT? <a href="#login">SIGN IN</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+<div class="panel panel-default" ng-model-options="{ getterSetter: true }">
+    <div class="panel-heading">
+        <h3>Invoice {{ id }}</h3>
+    </div>
+    <div class="panel-body" ng-show="invoice == null">
+        LOADING ...
+    </div>
+    <div class="panel-body" ng-show="invoice != null">
+        <div class="alert alert-danger" ng-show="invoice.state() == invoiceState.late">
+            This invoice is <span style="font-weight:bold">late</span> and must
+            be paid to continue service!
+        </div>
+        <div class="alert alert-warning" ng-show="invoice.state() == invoiceState.unpaid">
+            This invoice is <span style="font-weight:bold">un-paid</span> and
+            must be paid <span style="font-weight:bold">before</span>
+            <span style="font-style:italic">{{invoice.dueDate().toDateString()}}</span>
+            to avoid late fees.
+        </div>
+        <div class="alert alert-info" ng-show="invoice.state() == invoiceState.cancelled">
+            This invoice has been <span style="font-weight:bold">voided</span>.
+        </div>
+        <div class="alert alert-info" ng-show="invoice.state() == invoiceState.awaitingSettlement">
+            This invoice is pending <span style="font-style:italic">payment settlement</span>.
+            Payment settlement normally takes <span style="font-style:italic">1-2</span>
+            business days.
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Create Date
+                    </span>
+                    <input type="text" class="form-control"
+                           ng-if="invoice.createDate()"
+                           ng-model="invoice.createDate" readonly>
+                    <input type="text" class="form-control"
+                           ng-if="!invoice.createDate()"
+                           value="" readonly>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Due Date
+                    </span>
+                    <input type="text" class="form-control"
+                           ng-if="invoice.dueDate()"
+                           ng-model="invoice.dueDate" readonly>
+                    <input type="text" class="form-control"
+                           ng-if="!invoice.dueDate()"
+                           value="NOT DUE">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Paid Date
+                    </span>
+                    <input type="text" class="form-control"
+                           ng-if="invoice.paidDate()"
+                           ng-model="invoice.paidDate">
+                    <input type="text" class="form-control"
+                           ng-if="!invoice.paidDate()"
+                           value="UNPAID" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="hasPayment">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Credited
+                    </span>
+                    <span class="input-group-addon">
+                        <i class="fa fa-dollar"></i>
+                    </span>
+                    <input type="number" step="0.01"
+                           class="form-control input-massive"
+                           ng-model="invoice.credited"
+                           readonly>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Items
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" ng-repeat="item in invoice.items()">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        Name
+                                    </span>
+                                    <input class="form-control input-massive"
+                                           type="text" placeholder="name"
+                                           ng-model="item.name"
+                                           readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4" ng-if="hasPayment">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </span>
+                                    <input class="form-control input-massive"
+                                           ng-model="item.amount"
+                                           readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row"
+             ng-if="hasPayment && (invoice.state() == invoiceState.unpaid ||
+                    invoice.state() == invoiceState.late)">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Pay Now
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div ng-include
+                             src="'inc/templates/account/braintree.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" ng-if="admin || userId == null">
+                <a id="invoice-render-download" style="display:none"></a>
+                <button ng-click="render()"
+                        class="btn btn-primary">
+                    <span ng-show="!rendering">
+                        Download PDF
+                    </span>
+                    <span ng-hide="!rendering">
+                        Downloading PDF ... <i class="fa fa-gear fa-spin"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-if="admin" class="btn btn-info"
+                        ng-show="invoice.state() == invoiceState.unpaid ||
+                                 invoice.state() == invoiceState.late"
+                        ng-click="beginMarkPaid()">
+                    Paid
+                </button>
+                <button ng-if="admin && hasPayment" class="btn btn-warning"
+                        ng-show="invoice.state() != invoiceState.cancelled"
+                        ng-click="markVoid()">
+                    <span ng-show="!markingVoid">
+                        Void
+                    </span>
+                    <span ng-hide="!markingVoid">
+                        Voiding ... <i class="fa fa-gear fa-spin"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for marking paid -->
+    <div class="modal fade" id="markPaidModal" tabindex="-1" role="dialog"
+         aria-labelledby="markPaidModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form" ng-submit="markPaid()">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">x</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h4 class="modal-title" id="markPaidModalLabel">
+                            Mark
+                            <span style="font-style:italic">
+                                {{ invoiceId }}
+                            </span>
+                            Paid
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon">Paid Date</span>
+                                <input id="invoice-paid-date" type="text"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="input-group" ng-if="hasPayment">
+                            <span class="input-group-addon">
+                                Credited <i class="fa fa-dollar"></i>
+                            </span>
+                            <input type="number" step="0.01"
+                                   class="form-control input-massive"
+                                   ng-model="invoice.credited">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span ng-show="!markingPaid">
+                                Submit
+                            </span>
+                            <span ng-hide="!markingPaid">
+                                Submitting ... <i class="fa fa-gear fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

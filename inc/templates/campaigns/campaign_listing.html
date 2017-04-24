@@ -1,0 +1,141 @@
+<div class="panel" ng-controller="campaignListingController">
+	<div ng-show="$parent.loading">
+		<h4 style="text-align:center">Loading campaigns...</h4>
+	</div>
+	<div ng-show="$parent.loading == false && campaigns.length === 0">
+		<h4 style="text-align:center">No active campaigns to show</h4>
+	</div>
+	<div ng-show="campaigns.length > 0">
+		<div class="row no-margin-bottom margin-y-10">
+			<div class="col-sm-4">
+				<h4>My Campaigns</h4>
+			</div>
+			<div class="col-sm-4 col-sm-offset-4 no-padding-y no-padding-x">
+				<form ng-submit="search()" class="pull-right">
+					<div class="input-group input-group-sm">
+						<input type="text" class="form-control"
+						       ng-model="campaignName"
+						       ng-keyup="search()"
+						       placeholder="Campaign Name">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 no-padding-x">
+				<table class="table table-striped table-straight no-padding-y">
+					<tr>
+						<th>
+							<span ng-click="sortBy('campaign',  smcampaign.field.name)" style="cursor:pointer">
+								<span>Campaign Name</span>
+								<i class="fa fa-sort-alpha-asc"
+								   ng-show="sort.object === 'campaign' &&
+									    sort.field === smcampaign.field.name &&
+									    sort.asc === false"
+								   title="Sort Ascending"></i>
+								<i class="fa fa-sort-alpha-desc"
+								   ng-show="sort.object === 'campaign' &&
+									    sort.field === smcampaign.field.name &&
+									    sort.asc === true"
+								   title="Sort Descending"></i>
+								<i class="fa fa-sort"
+								   ng-show="sort.object !== 'campaign' ||
+									    sort.field !== smcampaign.field.name"
+								   title="Sort"></i>
+							</span>
+						</th>
+						<th ng-repeat="s in $parent.displayStats" style="text-align:right">
+							<span ng-click="sortBy('stats', s.code)" style="cursor:pointer">
+								<span ng-class="{ 'hidden-xs': s.text != 'Spend' && s.text != 'Revenue' && s.text != 'ROI' }">{{ s.text }}</span>
+								<i class="fa fa-sort-numeric-asc hidden-xs"
+								   ng-show="sort.object === 'stats' && sort.field === s.code &&
+									    sort.asc === false"
+								   title="Sort Ascending"></i>
+								<i class="fa fa-sort-numeric-desc hidden-xs"
+								   ng-show="sort.object === 'stats' && sort.field === s.code &&
+									    sort.asc === true"
+								   title="Sort Descending"></i>
+								<i class="fa fa-sort hidden-xs"
+								   ng-show="sort.object !== 'stats' || sort.field !== s.code"
+								   title="Sort"></i>
+							</span>
+						</th>
+					</tr>
+					<tr ng-repeat="c in campaigns">
+						<td>
+							<span>
+								<span class="badge">{{ c.campaign.name() }}</span>
+								<i ng-show="c.campaign.state() === smcampaign.state.dailyBudget"
+								   class="fa fa-exclamation"
+								   style="color:rgba(233, 30, 30, 0.74)"
+								   title="Daily Budget Exhausted"></i>
+								<i ng-show="c.campaign.state() === smcampaign.state.totalBudget"
+								   class="fa fa-exclamation"
+								   style="color:rgba(233, 30, 30, 0.74)"
+								   title="Total Budget Exhausted"></i>
+								<i ng-show="c.campaign.state() === smcampaign.state.accountBudget"
+								   class="fa fa-exclamation"
+								   style="color:rgba(233, 30, 30, 0.74)"
+								   title="Account Budget Exhausted"></i>
+							</span>
+							<div class="campaign-controls">
+								<button ng-show="c.campaign.state() !== smcampaign.state.archived"
+									data-toggle="tooltip" ng-click="archive(c.campaign)"
+									data-placement="top" title="Archive Campaign"
+									class="btn btn-xs btn-danger">
+									<i class="fa fa-file-archive-o"></i>
+								</button>
+								<span ng-show="c.campaign.state() === smcampaign.state.archived"
+									title="Archived Campaign"
+									class="btn btn-xs btn-primary"
+									style="cursor:default">
+									<i class="fa fa-archive"></i>
+								</span>
+								<button ng-show="c.campaign.state() === smcampaign.state.paused"
+									data-toggle="tooltip" ng-click="toggleState(c.campaign)"
+									data-placement="top" title="Activate Campaign"
+									class="btn btn-xs btn-success">
+									<i class="fa fa-play"></i>
+								</button>
+								<button ng-show="c.campaign.isActive()"
+									data-toggle="tooltip" ng-click="toggleState(c.campaign)"
+									data-placement="top" title="Pause Campaign"
+									class="btn btn-xs btn-warning">
+									<i class="fa fa-pause"></i>
+								</button>
+								<a ng-show="c.campaign.state() !== smcampaign.state.archived"
+								   data-toggle="tooltip" ng-href="#campaign/edit/{{ c.campaign.id() }}/{{ userId }}"
+								   data-placement="top" title="Edit"
+								   class="btn btn-xs btn-default">
+									<i class="fa fa-wrench"></i>
+								</a>
+								<a data-toggle="tooltip" ng-href="#reports/{{ c.campaign.id() }}/{{ userId }}"
+								   data-placement="top" title="Report"
+								   class="btn btn-xs btn-info">
+									<i class="fa fa-bar-chart-o"></i>
+								</a>
+							</div>
+						</td>
+						<td ng-repeat="s in $parent.displayStats" style="text-align:right">
+							<span ng-switch="s.code" ng-if="c.stats != null">
+								<span ng-switch-when="spend">
+									${{ c.stats.field(s.code) || 0 | number : 2 }}
+								</span>
+								<span ng-switch-when="revenue">
+									${{ c.stats.field(s.code) || 0 | number : 2 }}
+								</span>
+								<span ng-switch-when="roi">
+									{{ c.stats.field(s.code) || 0 | number : 0 }}%
+								</span>
+								<span ng-switch-default class="hidden-xs">{{ c.stats.field(s.code) || 0 | number }}</span>
+							</span>
+							<span ng-if="c.stats == null" class="hidden-xs text-muted">
+								<i class="fa fa-spin fa-circle-o-notch"></i>
+							</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

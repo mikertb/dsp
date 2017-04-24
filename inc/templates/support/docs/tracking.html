@@ -1,0 +1,12 @@
+You may track conversions (actions) for your campaign reports. To do this, you must setup a post back link
+to notify our servers an action has happened.
+<br /><br />
+<code>http://dsp.smrtb.com/bid/converted/<IMPID></code>
+<br /><br />
+Replace <IMPID> in your postback with the impression id from your tracking token.
+<br />
+Your actual token for this in the postback url will be different depending on what platform you use. If you use
+HasOffers for example, the token would br
+{aff_sub}, so your link would look like
+<br />
+<code>http://dsp.smrtb.com/bid/converted/{aff_sub}</code>

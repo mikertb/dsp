@@ -1,0 +1,16 @@
+<div class="panel">
+    <div class="panel-body">
+        <fieldset>
+            <legend><h3>Help Guide</h3></legend>
+            <div class="help-list">
+                <span ng-repeat="doc in docs">
+                    <a ng-href="#support/docs/{{ doc.id }}">{{ doc.title }}</a>
+                </span>
+            </div>
+        </fieldset>
+        <div class="well well-sm help-well">
+            <div ng-include src="docUrl()"></div>
+        </div>
+    </div>
+</div>
+<script src="inc/js/owl.carousel.min.js"> </script>

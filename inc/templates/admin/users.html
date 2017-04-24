@@ -1,0 +1,105 @@
+<div class="panel" ng-controller="adminUsersController">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Verified Users
+					</div>
+					<div class="panel-body" ng-show="filteredVerifiedUsers == null">
+						LOADING <i class="fa fa-gear fa-spin"></i>
+					</div>
+					<div class="panel-body" ng-hide="filteredVerifiedUsers == null">
+						<div class="row">
+							<table class="table table-hover table-striped">
+								<tr>
+									<th>Name</th><th>Company</th><th>E-Mail</th><th>Country</th>
+								</tr>
+								<tr ng-repeat="user in filteredVerifiedUsers |
+											   limitTo : verifiedLimit : verifiedOffset">
+									<td>
+										<a ng-href="#/admin/user/{{ user.id() }}">
+											{{ user.details().firstName() }}
+											{{ user.details().lastName() }}
+										</a>
+									</td>
+									<td>{{ user.details().company() }}</td>
+									<td>{{ user.email() }}</td>
+									<td>{{ user.details().country() }}</td>
+								</tr>
+							</table>
+						</div>
+						<div class="row">
+							<button ng-disabled="!hasPrevVerified()"
+									ng-click="prevVerified()">
+								<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+							</button>
+							<button ng-disabled="!hasNextVerified()"
+									ng-click="nextVerified()">
+								<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+							</button>
+							<form ng-submit="filterVerified()" class="pull-right">
+								<div class="input-group input-group-sm">
+									<input type="text" class="form-control"
+										   ng-model="filteredVerifiedText"
+										   ng-keyup="filterVerified()"
+										   placeholder="User">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Un-verified Users
+					</div>
+					<div class="panel-body" ng-show="filteredUnverifiedUsers == null">
+						LOADING <i class="fa fa-gear fa-spin"></i>
+					</div>
+					<div class="panel-body" ng-hide="filteredUnverifiedUsers == null ||
+													 unverifiedUsers.length == 0">
+						<div class="row">
+							<table class="table table-hover table-striped">
+								<tr>
+									<th>Name</th><th>Company</th><th>E-Mail</th><th>Country</th>
+								</tr>
+								<tr ng-repeat="user in filteredUnverifiedUsers |
+											   limitTo : unverifiedLimit : unverifiedOffset">
+									<td>
+										<a ng-href="#/admin/user/{{ user.id() }}">
+											{{ user.details().firstName() }}
+											{{ user.details().lastName() }}
+										</a>
+									</td>
+									<td>{{ user.details().company() }}</td>
+									<td>{{ user.email() }}</td>
+									<td>{{ user.details().country() }}</td>
+								</tr>
+							</table>
+						</div>
+						<div class="row">
+							<button ng-disabled="!hasPrevUnverified()"
+									ng-click="prevUnverified()">
+								<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+							</button>
+							<button ng-disabled="!hasNextUnverified()"
+									ng-click="nextUnverified()">
+								<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+							</button>
+							<form ng-submit="filterUnverified()" class="pull-right">
+								<div class="input-group input-group-sm">
+									<input type="text" class="form-control"
+										   ng-model="filteredUnverifiedText"
+										   ng-keyup="filterUnverified()"
+										   placeholder="User">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

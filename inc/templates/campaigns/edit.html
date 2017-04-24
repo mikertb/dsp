@@ -1,0 +1,78 @@
+<div class="rage-bg">
+	<div class="vert-nav">
+		<ul class="nav nav-pills nav-stacked">
+			<li class="active">
+				<a id="settings-tab"
+				   href="/campaigns/edit#global"
+				   data-toggle="tab">
+					<i class="fa fa-gear fa-3x"></i>
+					<br>Settings
+				</a>
+			</li>
+			<div ng-hide="create" class="divider"></div>
+			<li ng-hide="create">
+				<a id="sbi-tab"
+				   href="/campaigns/edit#sbi"
+				   data-toggle="tab">
+					<i class="fa fa-crosshairs fa-3x"></i>
+					<br>Targeting
+				</a>
+			</li>
+			<div ng-hide="create" class="divider"></div>
+			<li ng-hide="create">
+				<a id="ads-tab"
+				   href="/campaigns/edit#msg"
+				   data-toggle="tab">
+					<i class="fa fa-picture-o fa-3x"></i>
+					<br>Ads
+				</a>
+			</li>
+			<div class="divider"></div>
+		</ul>
+	</div>
+
+	<div class="edit-tab-content">
+		<div class="tab-pane active" id="global">
+			<div class="panel">
+				<div class="panel-body">
+					<div class="settings-tab">
+						<span class="title">CAMPAIGN SETTINGS</span>
+						<div class="spacer"></div>
+						<div ng-include
+						     src="'inc/templates/campaigns/settings.html'">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-hide="create" class="tab-pane" id="sbi">
+			<div class="panel">
+				<div class="panel-body">
+					<div class="settings-tab">
+						<span class="title">CAMPAIGN RULES</span>
+						<div class="spacer"></div>
+						<div ng-include
+						     src="'inc/templates/campaigns/targeting.html'">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div ng-include
+			     src="'inc/templates/campaigns/sbi.html'">
+			</div>-->
+		</div>
+		<div ng-hide="create" class="tab-pane" id="msg">
+			<div class="panel">
+				<div class="panel-body">
+					<div class="settings-tab">
+						<span class="title">CAMPAIGN ADS</span>
+						<div class="spacer"></div>
+						<div ng-include
+						     src="'inc/templates/campaigns/ads.html'">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

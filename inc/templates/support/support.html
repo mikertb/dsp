@@ -1,0 +1,33 @@
+<div class="panel">
+    <div class="panel-body">
+        <div ng-show="!admin" class="well well-sm">
+            Visit our <a href="#support/docs/rtb" class="btn btn-info">Help</a> guides for documentation on how to best use our platform,
+            as well as read FAQs. <a href="#support/docs/rtb">Go To Help Pages</a><br />
+            Still have a question that isn't covered or just want to say hi? Submit it below and we'll fix you up.
+        </div>
+        <fieldset>
+            <legend>Customer Support Tickets</legend>
+            <div ng-show="admin" class="row">
+                <div class="col-md-2 margin-bottom-20">
+                    <div class="text-center">
+                        <select ng-model="status" ng-change="load()" class="form-control">
+                            <option value="0">New</option>
+                            <option value="1">Customer Reply</option>
+                            <option value="2">Awaiting Reply</option>
+                            <option value="3">Closed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <h4 ng-show="tickets.length === 0">You have not created any support tickets yet</h4>
+            <table ng-show="tickets.length > 0" class="table table-striped table-hover" id="supportTickets">
+                <!-- dtables -->
+            </table>
+            <div class="row">
+                <div class="col-md-2" style="margin-top: 20px;">
+                    <a href="#support/new" class="btn btn-primary">New Ticket</a>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

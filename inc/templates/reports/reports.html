@@ -1,0 +1,309 @@
+<div class="panel panel-default" ng-show="loading">
+	<div class="panel-heading">
+		<h3>Report</h3>
+	</div>
+	<div class="panel-body">
+		Loading...
+	</div>
+</div>
+
+<div class="panel" ng-hide="loading">
+	<div class="panel-body">
+		<h3 ng-show="campaign != null"><label>{{ campaign.name() }}</label> Campaign Report</h3>
+		<h3 ng-hide="campaign != null">Bidder Inventory Report</h3>
+		<div class="well well-sm campaign-report-options">
+			<div class="row" ng-show="cid">
+				<div class="col-sm-12">
+					<label>Report Type</label>
+					<div ng-init="reportType = 'stats'">
+						<div class="btn" ng-class="{ 'btn-info': reportType === 'stats' }" ng-click="reportType = 'stats'">Statistics</div>
+						<div class="btn" ng-class="{ 'btn-info': reportType === 'trends' }" ng-click="reportType = 'trends'">Trends</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-show="reportType !== 'trends'">
+				<div class="col-md-12">
+					<label for="report-fields">Group By
+						<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip" data-placement="top"
+							title="Choose which fields to report on">
+							<i class="fa fa-question"></i>
+						</button>
+					</label>
+					<select id="report-fields" class="form-control" data-placeholder=""
+						ng-model="reportingFields"
+						ng-options="key as value for (key, value) in fields"
+						chosen multiple>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="row" ng-show="cid && reportType !== 'trends'">
+				<div class="col-md-12">
+					<label for="report-stats">Statistics
+						<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip" data-placement="top"
+							title="Choose which statistics to report">
+							<i class="fa fa-question"></i>
+						</button>
+					</label>
+					<select id="report-stats" class="form-control" data-placeholder=""
+						ng-model="reportingStats"
+						ng-options="stat as stat.text for stat in stats track by stat.code"
+						chosen multiple>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="row" ng-show="cid && reportType === 'trends'">
+				<div class="col-md-4">
+					<label for="report-stats">X Axis Metric
+						<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip" data-placement="top"
+							title="Choose which statistic to report against on the horizontal axis">
+							<i class="fa fa-question"></i>
+						</button>
+					</label>
+					<select id="report-stats" class="form-control" data-placeholder=""
+						ng-model="reportingStatX"
+						ng-options="stat as stat.text for stat in trendStats track by stat.code"
+						chosen>
+						<option value=""></option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<label for="report-stats">Y Axis Metric
+						<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip" data-placement="top"
+							title="Choose which statistic to report against on the vertical axis">
+							<i class="fa fa-question"></i>
+						</button>
+					</label>
+					<select id="report-stats" class="form-control" data-placeholder=""
+						ng-model="reportingStatY"
+						ng-options="stat as stat.text for stat in trendStats track by stat.code"
+						chosen>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="row" ng-show="cid">
+				<div class="col-md-12">
+					<label>Date Range
+						<button type="button" class="btn btn-help thelp"
+							data-toggle="tooltip" data-placement="top"
+							title="Choose which time period to report on">
+							<i class="fa fa-question"></i>
+						</button>
+					</label>
+					<div class="col-md-12" style="padding: 0;">
+						<div class="col-sm-4" style="padding-left: 0;">
+							<div class="input-wrap">
+								<div class="input-group">
+									<span class="input-group-addon">Start</span>
+									<input id="stats-date-start" type="text"class="form-control"
+									       ng-model="form.date_start">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="input-wrap">
+								<div class="input-group">
+									<span class="input-group-addon">End</span>
+									<input id="stats-date-end" type="text"class="form-control"
+									       ng-model="form.date_end">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<button class="btn btn-default"
+								ng-click="setDatePeriod(0)">Today</button>
+							<button class="btn btn-default"
+								ng-click="setDatePeriod(6)">Week</button>
+							<button class="btn btn-default"
+								ng-click="setDatePeriod(29)">Month</button>
+							<button class="btn btn-default"
+								ng-click="setDatePeriod(364)">Year</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 10px;">
+				<div class="col-md-4" ng-show="reportType !== 'trends'">
+					<button type="button" ng-init="doGraph = true" ng-click="doGraph = !doGraph"
+							class="btn btn-default">
+						Graph
+						<span ng-show="doGraph" class="text-success">
+							<i class="fa fa-check"></i>
+						</span>
+						<span ng-hide="doGraph" class="text-danger">
+							<i class="fa fa-times"></i>
+						</span>
+					</button>
+					<input type="submit" class="btn btn-primary"
+					       value="Report" ng-click="doReport()" />
+					<input type="submit" class="btn btn-primary"
+					       value="Export User IDs" ng-click="doExportUserIds()"
+						   ng-show="campaign != null" />
+				</div>
+					<div class="col-md-4" ng-show="reportType === 'trends'">
+						<input type="submit" class="btn btn-primary"
+						value="Graph" ng-click="doTrendReport()" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="trenddiv" ng-show="doTrend">
+		</div>
+		<fieldset ng-show="reports.length !== 0 || reportFilter">
+			<h4>Report Results <span class="badge">{{ reports.length | megaNumber }}</span></h4>
+			<div class="row" ng-show="doGraph">
+				<div class="col-sm-12 no-padding-x no-margin-y">
+					<div id="chartdiv"></div>
+				</div>
+			</div>
+			<div class="sbi-list-container well well-sm">
+				<div ng-repeat="(k, v) in reportingFilter" class="input-group sbi-criteria">
+					<span class="input-group-addon"> {{ fields[k] }} </span>
+					<span ng-repeat="val in v track by $index" class="form-control" style="width: auto;">
+						{{ val }}
+						<i class="fa fa-times" ng-click="rmFilterVal(k, $index)"></i>
+					</span>
+				</div>
+			</div>
+			<table class="table table-striped table-hover table-straight" id="report-table">
+				<thead>
+					<tr>
+						<th ng-repeat="f in reportFields track by $index"
+						  ng-hide="reportFilter[f].length <= 1 && reportingFields.length"
+							ng-class="{ 'padding-right-30p': $last }" ng-click="sort('model', f)">
+							{{ fields[f] }}
+						</th>
+						<th ng-repeat="f in reportStats" ng-click="sort('stats', f.code)">
+							{{ f.text }}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="r in reports | orderBy:sortBy:reverse | startFrom: pagination.page * pagination.perPage | limitTo: 15 as results">
+						<td class="text-muted" ng-repeat="f in reportFields track by $index"
+							ng-hide="reportFilter[f].length <= 1 && reportingFields.length"
+						 	ng-class="{ 'padding-right-30p': $last }">
+							{{ r.model.field(f) }}
+						</td>
+						<td ng-repeat="f in reportStats track by $index">
+							{{ r.stats.format(f.code, r.stats.field(f.code)) }}
+							<span ng-if="$last" class="campaign-controls" ng-init="rule = (rules ? testRules(r) : false); bid = rule ? rule.bid() : defaultBid">
+								<button ng-show="cid" class="btn btn-sm btn-default btn-xs thelp"
+								 data-toggle="tooltip" title="Create blacklist rule" ng-disabled="{{ bid ==  0}}"
+								 ng-class="{ 'btn-warning': rule, 'btn-default': !rule }" ng-click="beginAddRule(r, rule)">
+									<i class="fa fa-ban"></i>
+								</button>
+								<button ng-show="!isFiltered(r.model)" class="btn btn-sm btn-default btn-xs thelp" ng-click="addFilter(r.model)"
+								data-toggle="tooltip" title="Filter reports by this value">
+									<i class="fa fa-filter"></i>
+								</button>
+								<button ng-show="cid" class="btn btn-sm btn-default btn-xs tip-bid-info-{{$index}}">
+									<i class="fa fa-eye" ng-mouseover="bidTooltip($index, r, bid)"
+									ng-mouseLeave="bidTooltip($index)"></i>
+								</button>
+								<span ng-show="cid">
+									<span ng-show="rule" class="label thelp" title="Matches rule '{{ rule.name() }}'" data-toggle="tooltip" data-placement="top"
+									ng-class="{ 'label-success': bid > 0.0, 'label-danger': !(bid > 0) }">
+										${{ bid | megaNumber : 2 }}
+									</span>
+									<span ng-hide="rule" class="label label-default thelp" title="Default Bid" data-toggle="tooltip" data-placement="top">
+										${{ bid | megaNumber : 2 }}
+									</span>
+								</span>
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-8">
+					<span class="pull-right">
+						<button class="btn btn-default" ng-click="pagination.prevPage()" ng-disabled="pagination.page == 0" ng-click="pagination.prevPage()">Previous</button>
+						<button class="btn btn-default" ng-disabled>{{ pagination.page+1 }} / {{ pagination.numPages }}</button>
+						<button class="btn btn-default" ng-click="pagination.nextPage()" ng-disabled="pagination.page + 1 >= pagination.numPages" ng-click="pagination.nextPage()">Next</button>
+					</span>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="modal fade modal-lg" id="add-rule-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Create Blacklist Rule</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger" ng-show="tmpRule">
+						This will override existing rule <b>{{ tmpRule.name() }}</b>!
+					</div>
+					<div class="row">
+						<label>Rule Criteria</label>
+						<div class="sbi-list-container">
+							<div ng-repeat="field in tmpReport.model.fields()" class="input-group sbi-criteria">
+								<span class="input-group-addon"> {{ field }} </span>
+								<span class="form-control" style="width: auto;">{{ tmpReport.model.field(field) }}</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 no-padding-x">
+							<label>Bid Price</label>
+							<div class="input-group">
+								<span class="input-group-addon input-currency">
+									<i class="fa fa-dollar"></i>
+								</span>
+								<input type="number" disabled value="0.00" class="form-control">
+								<span class="input-group-addon input-validation">
+									<button type="button" class="btn btn-help thelp"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="How much to bid for traffic matching this criteria">
+										<i class="fa fa-question"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary">Save</button>
+					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div id="bidinfo-tooltip" ng-cloak style="display: none;">
+		<div class="row">
+			<h6 class="text-muted">DAILY IMPRESSIONS</h6>
+			<h3 style="margin: 0; padding: 0;">{{ tip.volume | megaNumber : 2 }}</h3>
+		</div>
+		<div class="row">
+			<h6 class="text-muted">BID COMPETITION</h6>
+			YOUR BID
+			<div class="progress">
+				<div class="progress-bar progress-bar-warning" role="progress-bar" style="width: {{ (tip.bid / tip.price)*100 }}%">
+					${{ tip.bid }}
+				</div>
+			</div>
+			AVERAGE PRICE
+			<div class="progress">
+				<div class="progress-bar progress-bar-info" role="progress-bar" style="width: 50%">
+					${{ tip.price }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,64 @@
+<div class="panel panel-default intel-form">
+    <div class="panel-heading">
+        Campaign Intelligence
+    </div>
+    <div class="panel-body">
+        <form ng-submit="doReport()">
+            <div class="row">
+              <h3>Attributes</h3>
+              <select chosen multiple class="form-control" ng-model="form.groups"
+                ng-options="key as value for (key, value) in groups">
+                <option value=""></option>
+              </select>
+          </div>
+            <div class="row intel-options">
+                <h3>Filters</h3>
+                <div class="intel-option intel-option-country">
+                    <div class="input-group">
+                        <span class="input-group-addon">Country</span>
+                        <select ng-init="country = 'ALL'" chosen class="form-control" ng-model="country"
+                            ng-options="key as value for (value , key) in countries">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="intel-option intel-option-exchange">
+                    <div class="input-group">
+                        <span class="input-group-addon">Exchange</span>
+                        <select chosen class="form-control" ng-model="exchange">
+                            <option value="">All</option>
+                            <option value="smaato">Smaato</option>
+                            <option value="floor6">Floor6</option>
+                            <option value="adiquity">Adiquity</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="intel-option intel-option-platform">
+                    <div class="input-group">
+                        <span class="input-group-addon">OS</span>
+                        <select class="form-control" ng-model="form.os">
+                            <option value="">All</option>
+                            <option value="android">Android</option>
+                            <option value="ios">iOS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="intel-option intel-option-pubtype">
+                    <div class="input-group">
+                        <span class="input-group-addon">Placement Type</span>
+                        <select class="form-control" ng-model="form.med_type">
+                            <option value="">All</option>
+                            <option value="app">App</option>
+                            <option value="site">Site</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+          <input type="submit" class="btn btn-primary intel-submit-btn" value="Report" />
+        </form>
+        <fieldset ng-show="reported" style="margin-top: 50px;" >
+          <legend>Report Results</legend>
+        <table class="table table-striped table-hover" id="intelTable"></table>
+      </fieldset>
+    </div>
+</div>

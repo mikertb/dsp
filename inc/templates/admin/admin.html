@@ -1,0 +1,70 @@
+<div class="rage-bg">
+    <div class="vert-nav">
+        <ul class="nav nav-pills nav-stacked">
+            <li ng-if="hasPermission(permission.allApproval)">
+                <a href="/home/account#admin-approvals" data-toggle="tab">
+                    <i class="fa fa-user fa-3x"></i><br>
+                    Approvals
+                </a>
+            </li>
+            <div class="divider" ng-if="hasPermission(permission.allApproval)"></div>
+            <li ng-if="hasPermission(permission.allUserInvoice)">
+                <a id="tab2" href="/home/account#admin-invoices"
+                   data-toggle="tab">
+                    <i class="fa fa-credit-card fa-3x"></i><br>
+                    Billing
+                </a>
+            </li>
+            <div class="divider" ng-if="hasPermission(permission.allUserInvoice)"></div>
+            <li>
+                <a id="tab3" href="/home/account#admin-coupons"
+                   data-toggle="tab">
+                    <i class="fa fa-list fa-3x"></i><br>
+                    Coupons
+                </a>
+            </li>
+            <div class="divider" ng-if="hasPermission(permission.allUser)"></div>
+            <li ng-if="hasPermission(permission.allUser)">
+                <a id="tab4" href="/home/account#users" data-toggle="tab">
+                    <i class="fa fa-users fa-3x"></i><br>
+                    Users
+                </a>
+            </li>
+            <div class="divider"></div>
+        </ul>
+    </div>
+    <div class="edit-tab-content">
+        <div class="tab-pane" id="admin-approvals"
+             ng-if="hasPermission(permission.allApproval)">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="settings-tab">
+                        <span class="title">PENDING CAMPAIGNS</span>
+                        <div class="spacer"></div>
+                        <div ng-include
+                             src="'inc/templates/admin/approvals.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="users"
+             ng-if="hasPermission(permission.allUser)">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="settings-tab">
+                        <span class="title">USER LISTING</span>
+                        <div class="spacer"></div>
+                        <div ng-include
+                             src="'inc/templates/admin/users.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="tab-pane" id="admin-invoices">
+        <div ng-include src="'inc/templates/admin/invoices.html'"></div>
+    </div>
+    <div class="tab-pane" id="admin-coupons">
+        <div ng-include src="'inc/templates/admin/coupons.html'"></div>
+    </div>-->
+</div>

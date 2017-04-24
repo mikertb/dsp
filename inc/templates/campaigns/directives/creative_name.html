@@ -1,0 +1,28 @@
+<div>
+	<span class="badge">{{ creative.name() }}</span>
+	<div class="campaign-controls">
+		<button ng-show="creative.state() !== smcampaign.itemState.archived"
+			data-toggle="tooltip" ng-click="archive(creative)"
+			data-placement="top" title="Archive Creative"
+			class="btn btn-xs btn-danger">
+			<i class="fa fa-file-archive-o"></i>
+		</button>
+		<span ng-show="creative.state() === smcampaign.itemState.archived"
+		      title="Archived Creative" class="btn btn-xs btn-primary"
+		      style="cursor:default">
+			<i class="fa fa-archive"></i>
+		</span>
+		<button ng-show="creative.state() === smcampaign.state.paused"
+			data-toggle="tooltip" ng-click="toggleState(creative)"
+			data-placement="top" title="Activate Creative"
+			class="btn btn-xs btn-success">
+			<i class="fa fa-play"></i>
+		</button>
+		<button ng-show="creative.state() === smcampaign.itemState.active"
+			data-toggle="tooltip" ng-click="toggleState(creative)"
+			data-placement="top" title="Pause Creative"
+			class="btn btn-xs btn-warning">
+			<i class="fa fa-pause"></i>
+		</button>
+	</div>
+</div>

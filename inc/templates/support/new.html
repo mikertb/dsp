@@ -1,0 +1,54 @@
+<div class="panel">
+    <div class="row">
+        <div class="col-md-8">
+            <h3>New Support Ticket</h3>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="margin-10">
+                    <input placeholder="Subject: What is your ticket about?" maxlength="75" class="form-control" ng-model="ticket.subject" />
+                </div>
+                <div class="margin-y-10">
+                    <textarea ng-model="ticket.content" class="form-control" rows="10" placeholder="How can we help you?"></textarea>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <p>
+                        <b>When can I expect a reply?</b><br />
+                        We usually respond same-day within<br />business hours of 8-5PM CST.
+                        Next <br />day if after.
+                    </p>
+                </div>
+                <div class="row">
+                    <p>
+                        <b>Is there a phone number?</b><br />
+                        Of course! (918) 771-4200
+                    </p>
+                </div>
+                <div class="row">
+                    <p>
+                        <b>How about skype?</b><br />
+                        We have you covered. Your account manager is smartb.mattr
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-y-10">
+            <div class="col-md-4">
+                <select ng-init="ticket.department = ''" ng-model="ticket.department" class="form-control">
+                    <option value="">-- Choose Department --</option>
+                    <option>Help</option>
+                    <option>Suggestions</option>
+                    <option>Bugs</option>
+                    <option>Billing</option>
+                </select>
+            </div>
+            <div class="col-md-2" >
+                <button ng-click="newTicket()" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

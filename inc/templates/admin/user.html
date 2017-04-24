@@ -1,0 +1,285 @@
+<div class="panel"
+     ng-model-options="{ getterSetter: true }">
+	<div class="panel-body" ng-show="user == null">
+        LOADING ...
+    </div>
+    <div class="panel-body" ng-hide="user == null">
+        <h3>
+            {{ user.details().firstName() }} {{ user.details().lastName() }}
+            <a class="btn btn-default" href="#/home/{{userId}}">
+                Sub User
+            </a>
+        </h3>
+        <div class="row text-center" ng-show="hasPayment">
+            <div class="col-sm-3">
+                <span class="badge">Prepay Funds</span><br />
+                <span ng-show="balance == null">
+                    LOADING
+                </span>
+                <span ng-hide="balance == null">
+                    ${{ (balance.amount() > 0 ?
+                         balance.amount() : 0) | number : 2 }}
+                </span>
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Credit Limit</span><br />
+                ${{ user.creditLimit() | number : 2 }}
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Buying Power</span><br />
+                <span ng-show="balance == null">
+                    LOADING
+                </span>
+                <span ng-hide="balance == null">
+                    ${{ (user.creditLimit() + balance.amount()) | number : 2 }}
+                </span>
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Credit Terms</span><br />
+                Net {{ user.creditNetTerm() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default margin-y-10">
+                    <div class="panel-heading">
+                        User Information
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <form ng-submit="updatePermissions()">
+                                <div class="col-md-10">
+                                    <label>Permissions</label>
+                                    <select class="form-control" chosen multiple
+                                            ng-model="user.permissions"
+                                            ng-options="o.code as o.text for o in permission">
+                                    </select>
+                                </div>
+                                <div class="col-md-2" style="margin-top:15px">
+                                    <button type="submit"
+                                            class="btn btn-primary margin-y-10">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row" ng-show="hasPayment">
+                            <form ng-submit="updatePayment()">
+                                <div class="col-md-2">
+                                    <label>Credit Net Term</label>
+                                    <select class="form-control"
+                                            ng-model="user.creditNetTerm"
+                                            convert-to-number>
+                                        <option value=""></option>
+                                        <option value="0">Net-0 (Prepay)</option>
+                                        <option value="7">Net-7</option>
+                                        <option value="10">Net-10</option>
+                                        <option value="15">Net-15</option>
+                                        <option value="30">Net-30</option>
+                                        <option value="40">Net-40</option>
+                                        <option value="60">Net-60</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Credit Limit</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon input-currency">
+                                            <i class="fa fa-dollar"></i>
+                                        </span>
+                                        <input type="number" class="form-control"
+                                               ng-model="user.creditLimit"
+                                               min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Markup</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon input-currency">
+                                            %
+                                        </span>
+                                        <input type="number" class="form-control"
+                                               ng-model="userMarkup"
+                                               min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                </div>
+                                <div class="col-md-2" style="margin-top:5px">
+                                    <button type="submit"
+                                            class="btn btn-primary margin-y-10">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" ng-if="hasInvoice">
+                <div class="panel panel-default margin-y-10">
+                    <div class="panel-heading">
+                        Un-paid Invoices
+                    </div>
+                    <div class="panel-body" ng-show="loadingInvoices">
+                        LOADING <i class="fa fa-gear fa-spin"></i>
+                    </div>
+                    <div class="panel-body" ng-show="!loadingInvoices && invoices.length == 0">
+                        No unpaid invoices.
+                    </div>
+                    <div class="panel-body" ng-show="!loadingInvoices && invoices.length > 0">
+                        <table class="table table-hover table-striped">
+                            <tr>
+                                <th>State</th>
+                                <th>ID</th>
+                                <th>Create Date</th>
+                                <th>Due Date</th>
+                                <th ng-if="hasPayment">Total Due</th>
+                            </tr>
+                            <tr ng-repeat="invoice in invoices">
+                                <th>
+                                    <span class="badge">
+                                        {{ invoice.state() }}
+                                    </span>
+                                    <i ng-if="invoice.state() == invoiceState.late"
+                                       class="fa fa-exclamation"
+                                       style="color:rgba(233, 30, 30, 0.74)"></i>
+                                </th>
+                                <th>
+                                    <a ng-href="#/account/invoice/{{ invoice.id() }}/{{ userId}}">
+                                        {{ invoice.id() }}
+                                    </a>
+                                </th>
+                                <th>
+                                    <span ng-if="invoice.createDate()">
+                                        {{ invoice.createDate().toDateString() }}
+                                    </span>
+                                </th>
+                                <th>
+                                    <span ng-if="invoice.dueDate()">
+                                        {{ invoice.dueDate().toDateString() }}
+                                    </span>
+                                </th>
+                                <th ng-if="hasPayment">
+                                    <span>
+                                        <i class="fa fa-dollar"></i>
+                                        {{ invoice.total() }}
+                                    </span>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" ng-show="hasInvoice">
+                <div class="panel panel-default margin-y-10">
+                    <div class="panel-heading">
+                        Create Invoice
+                    </div>
+                    <div class="panel-body">
+                        <form ng-submit="createInvoice()">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Items
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-hover table-striped">
+                                                <tr ng-repeat="item in newInvoice.items">
+                                                    <td class="col-md-6">
+                                                        <input type="text"
+                                                               class="form-control
+                                                                      input-massive"
+                                                               placeholder="Name"
+                                                               ng-model="item.name"
+                                                               required>
+                                                    </td>
+                                                    <td class="col-md-4">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-dollar"></i>
+                                                            </span>
+                                                            <input type="number"
+                                                                   class="form-control
+                                                                          input-massive"
+                                                                   ng-model="item.amount"
+                                                                   min="0.00" placeholder="0.00"
+                                                                   step="0.01" required>
+                                                        </div>
+                                                    </td>
+                                                    <td class="col-md-2">
+                                                        <button ng-click="removeNewInvoiceItem(item)"
+                                                                class="btn btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <div class="row">
+                                                <button ng-click="newInvoiceItem()"
+                                                        class="btn btn-success">
+                                                    New Item
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-sm-4">
+                                        <label>State</label>
+                                        <div class="input-group">
+                                            <select class="form-control"
+                                                    ng-model="newInvoice.state">
+                                                <option value="LATE">
+                                                    Un-paid (late)
+                                                </option>
+                                                <option value="UNPAID">
+                                                    Un-paid
+                                                </option>
+                                                <option value="PAID"
+                                                        ng-if="hasPayment">
+                                                    Paid
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"
+                                         ng-show="newInvoice.state == invoiceState.paid">
+                                        <label></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-dollar"></i>
+                                            </span>
+                                            <input type="number"
+                                                   class="form-control input-massive"
+                                                   ng-model="newInvoice.credited"
+                                                   min="0" placeholder="0"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"
+                                         ng-hide="newInvoice.state == invoiceState.paid">
+                                        <label>Due Date</label>
+                                        <div class="input-wrap">
+                                            <div class="input-group">
+                                                <input id="new-invoice-due-date"
+                                                       type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                            class="btn btn-primary"
+                                            style="margin-top:30px;magin-left:14px">
+                                        Create
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

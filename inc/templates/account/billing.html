@@ -1,0 +1,98 @@
+<div class="panel" ng-controller="accountBillingController">
+    <div class="panel-body">
+        <div class="row text-center">
+            <div class="col-sm-3">
+                <span class="badge">
+                    Prepay Funds
+                </span><br />
+                <span ng-show="usrBal">
+                    ${{ (usrBal.balance().amount() > 0 ?
+                         usrBal.balance().amount() : 0) | number : 2 }}
+                </span>
+                <span ng-show="!usrBal">
+                    LOADING
+                </span>
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Credit Limit</span><br />
+                <span ng-show="usrBal">
+                            ${{ usrBal.user().creditLimit() | number : 2 }}
+                </span>
+                <span ng-show="!usrBal">
+                    LOADING
+                </span>
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Buying Power</span><br />
+                <span ng-show="usrBal">
+                    ${{ (usrBal.user().creditLimit() +
+                         usrBal.balance().amount()) | number : 2 }}
+                </span>
+                <span ng-show="!usrBal">
+                    LOADING
+                </span>
+            </div>
+            <div class="col-sm-3">
+                <span class="badge">Credit Terms</span><br />
+                <span ng-show="usrBal">
+                    Net {{ usrBal.user().creditNetTerm() }}
+                </span>
+                <span ng-show="!usrBal">
+                    LOADING
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Make Payment
+                </div>
+                <div class="panel-body">
+                    <div class="row" ng-show="unpaidInvoices == null ||
+                                              lateInvoices == null">
+                        LOADING ...
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
+                    <div class="row" ng-hide="unpaidInvoices == null ||
+                                              lateInvoices == null ||
+                                              (unpaidInvoices.length == 0 &&
+                                               lateInvoices.length == 0)">
+                        <div class="col-xs-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">Select Invoice</span>
+                                <select ng-model="invoiceId"
+                                        name="pendingInvoices"
+                                        id="pendingInvoices"
+                                        class="form-control"
+                                        convert-to-number>
+                                    <option ng-repeat="inv in lateInvoices"
+                                            value="{{inv.id()}}">
+                                        <span style="font-style:italic">
+                                            {{ inv.id() }}
+                                            -
+                                            {{ inv.dueDate().toString() }}
+                                        </span>
+                                        LATE
+                                    </option>
+                                    <option ng-repeat="inv in unpaidInvoices"
+                                            value="{{inv.id()}}">
+                                        <span style="font-style:italic">
+                                            {{ inv.id() }}
+                                            -
+                                            {{ inv.dueDate().toString() }}
+                                        </span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="unpaidInvoices == null ||
+                                              lateInvoices == null">
+                        <div ng-include
+                             src="'inc/templates/account/braintree.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
