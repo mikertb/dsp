@@ -1,0 +1,524 @@
+----------------------------------------------------------------------------------------
+ ACCOUNT - Signup
+----------------------------------------------------------------------------------------
+
+Description:
+    New user signup. User will have to verify account through confirmation link sent via
+    email.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/signup
+
+Request Fields:
+    email : <email (string)>,
+    password: <password (string)>,
+    details: <details (object)>
+
+Sample Request:
+    {
+        "email": "user@domain.com",
+        "password":"Password_123",
+        "details":
+        {
+            "first_name":"Juan",
+            "last_name":"Dela Cruz"
+        }
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Verify
+----------------------------------------------------------------------------------------
+
+Description:
+    Request user account verification.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/verify
+
+Request Fields:
+    email: <user email (string)>,
+    key : <key (string)>
+
+Sample Request:
+    {
+        "email": "user@domain.com",
+        "key": "4564s5df56s4df6sd5f64sdf"
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Resend Verification
+----------------------------------------------------------------------------------------
+
+Description:
+    Resend user account verification email.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/verify/resend
+
+Request Fields:
+    email: <user email (string)>
+
+Sample Request:
+    {
+        "email": "user@domain.com"
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Login
+----------------------------------------------------------------------------------------
+
+Description:
+    Authenticate user. The 'session_id' field from response serves as token in succeeding
+    requests.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/login
+
+Request Fields:
+    email : <email (string)>,
+    password: <password (string)>
+
+Sample Request:
+    {
+        "email":"john@joe.ccom",
+        "password":"Password_123"
+    }
+
+Sample Response:
+    {
+        "session_id": "1234567a-12ab-3c45-0000-ac09cc3747ee-2392726357911011328",
+        "user_id": 1234567890,
+        "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Logout
+----------------------------------------------------------------------------------------
+
+Description:
+    Destroy session.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/logout
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Get
+----------------------------------------------------------------------------------------
+
+Description:
+    Get information of single user. User id has to be specified in 'suid' field.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/get
+
+Request Fields:
+    session_id: <session id (string)>,
+    suid: <userid (int)>,
+    user_fields: <fields (array)>
+
+Sample Request:
+    {
+        "session_id":"1234567a-12ab-3c45-0000-ac09cc3747ee-2392726357911011328",
+        "suid": "1234567890",
+        "user_fields":["email","details"],
+        "balance_fields":null
+    }
+
+Sample Response:
+    {
+        "user":
+        {
+            "permissions":
+            [
+                "LOGIN",
+                "CAMPAIGN",
+                "ALL_CAMPAIGN",
+                "ALL_APPROVAL",
+                "ALL_USER",
+                "ALL_USER_INVOICE",
+                "ALL_USER_PAYMENT"
+            ],
+            "email": "an@airkoryo.org",
+            "details":
+            {
+                "first_name": "An Pyong",
+                "last_name": "Chil",
+                "company": "Air Koryo",
+                "country": "PRK",
+                "city": "Pyongyang"
+            },
+            "credit_net_term": -1
+        },
+        "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Set Info
+----------------------------------------------------------------------------------------
+
+Description:
+    Set information of single user. User id has to be specified in 'suid' field.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/set
+
+Request Fields:
+    session_id: <session id (string)>,
+    suid: <userid (int)>,
+    ruser: <user (object)>
+
+Sample Request:
+    {
+        "session_id":"1234567a-12ab-3c45-0000-ac09cc3747ee-2392726357911011328",
+        "suid": 1234567890,
+        "ruser":
+        {
+            "permissions": 
+            [
+                "LOGIN",
+                "CAMPAIGN",
+                "ALL_CAMPAIGN",
+                "ALL_APPROVAL",
+                "ALL_USER",
+                "ALL_USER_INVOICE",
+                "ALL_USER_PAYMENT"
+            ],
+            "details":
+            {
+                "first_name": "An Pyong",
+                "last_name": "Chil",
+                "company": "Air Koryo",
+                "country": "PRK",
+                "city": "Pyongyang"
+            }
+        }
+    }
+
+Sample Response:
+    {
+        "errno": "ESUCCESS"
+    }    
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Set Password
+----------------------------------------------------------------------------------------
+
+Description:
+    Set password for current user.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/set/password
+
+Request Fields:
+    session_id: <session id (string)>,
+    current_password: <current password (string)>,
+    new_password: <new password (string)>
+
+Sample Request:
+    {
+        "session_id":"1234567a-12ab-3c45-0000-ac09cc3747ee-2392726357911011328",
+        "current_password": "Old_password_123",
+        "new_password": "New_password_123",
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Reset Password
+----------------------------------------------------------------------------------------
+
+Description:
+    Reset password.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/reset/password
+
+Request Fields:
+    email: <email (string)>
+
+Sample Request:
+    {
+        "email": "user@domain.com"
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Reset Set Password
+----------------------------------------------------------------------------------------
+
+Description:
+    Reset set password <= ???
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/reset/set_password
+
+Request Fields:
+    email: <email (string)>,
+    key: <key (string)>,
+    password: <password (string)>
+
+Sample Request:
+    {
+        "email": "user@domain.com",
+        "key": "12a3sd2fs32f12d5564835sd",
+        "password": "Password_123"
+    }
+
+Sample Response:
+    {
+      "errno": "ESUCCESS"
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNTS - List
+----------------------------------------------------------------------------------------
+
+Description:
+    List all registered accounts. Requesting account has to have enough permission.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/accounts/list
+
+Request Fields:
+    session_id: <session id (string)>,
+    suid: <userid (int)>,
+    user_fields: <fields (array)>,
+    balance_fields: <????>
+
+Sample Request:
+    {
+        "session_id":"91d801ed-da95-415d-8141-2084e04c121c-2392726357911011328",
+        "user_Fields":["email","details"],
+        "balance_fields":null
+    }
+
+Sample Response:
+    {
+      "entries": [
+        {
+          "id": 1234567890,
+          "user": {
+            "permissions": [
+              "LOGIN",
+              "CAMPAIGN"
+            ],
+            "email": "user1@domain.com",
+            "details": {
+              "first_name": "Nathan",
+              "last_name": "Summers",
+              "company": "Unknown Digital AB",
+              "address1": "101 J-walk St.",
+              "apt_suite": "VAT: 02394923454",
+              "country": "SWE",
+              "city": "Solna"
+            },
+            "credit_net_term": -1
+          }
+        },
+        {
+          "id": 1234567891,
+          "user": {
+            "permissions": [
+              "LOGIN",
+              "CAMPAIGN"
+            ],
+            "email": "user2@domain.com",
+            "details": {
+              "first_name": "Vanessa",
+              "last_name": "Carlysle"
+            },
+            "credit_net_term": -1
+          }
+        },
+        {
+          "id": 1234567892,
+          "user": {
+            "permissions": [
+                "LOGIN",
+                "CAMPAIGN",
+                "ALL_CAMPAIGN",
+                "ALL_APPROVAL",
+                "ALL_USER",
+                "ALL_USER_INVOICE"
+            ],
+            "email": "user3@domain.com",
+            "details": {
+              "first_name": "Gaveedra",
+              "last_name": "Seven"
+            },
+            "credit_net_term": -1
+          }
+        }
+    }
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Get Invoice by ID
+----------------------------------------------------------------------------------------
+
+Description:
+    Retrieve invoice by id.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/get/invoice
+
+Request Fields:
+    suid: <userid (int)>,
+    invoice_id: <invoice id (int)>,
+    invoice_fields: <? (?)>
+
+Sample Request:
+    {
+        "suid": 1234567890,
+        "invoice_id": 123,
+        "invoice_fields": ?
+    }
+
+Sample Response:
+    {
+      ???
+    }
+
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - List Invoices
+----------------------------------------------------------------------------------------
+
+Description:
+    List invoices for a single user.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/list/invoices
+
+Request Fields:
+    suid: <userid (int)>,
+    start_date: <? (?)>,
+    end_date: <? (?)>,
+    invoice_fields: <? (?)>
+    state: <? (?)>
+
+Sample Request:
+    {
+        "suid": 1234567890,
+        "start_date": ?,
+        "end_date": ?,
+        "invoice_fields": ?
+        "state": ?
+    }
+
+Sample Response:
+    {
+      ???
+    }
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Void Invoice
+----------------------------------------------------------------------------------------
+
+Description:
+    Mark invoice as voided.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/void/invoice
+
+Request Fields:
+    suid: <userid (int)>,
+    invoice_id: <invoice id (int)>
+
+Sample Request:
+    {
+        "suid": 1234567890,
+        "invoice_id": 123
+    }
+
+Sample Response:
+    {
+      ???
+    }
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Paid Invoice
+----------------------------------------------------------------------------------------
+
+Description:
+    Mark invoice as paid.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/paid/invoice
+
+Request Fields:
+    suid: <userid (int)>,
+    invoice_id: <invoice id (int)>,
+    paid_date: <? (?)>,
+    credit: <credit (boolean)> - [if true, credit to user]
+
+Sample Request:
+    {
+        "suid": 1234567890,
+        "invoice_id": 123,
+        "paid_date": ?,
+        "credit": true
+    }
+
+Sample Response:
+    {
+      ???
+    }
+
+----------------------------------------------------------------------------------------
+ ACCOUNT - Create Invoice
+----------------------------------------------------------------------------------------
+
+Description:
+    Create new invoice.
+
+Endpoint:
+    POST https://dsp-api.rtb.cat/account/create/invoice
+
+Request Fields:
+    suid: <userid (int)>,
+    invoice: <? (?)>
+
+Sample Request:
+    {
+        "suid": 1234567890,
+        "invoice_id": 123,
+        "paid_date": ?,
+        "credit": true
+    }
+
+Sample Response:
+    {
+      ???
+    }
+
