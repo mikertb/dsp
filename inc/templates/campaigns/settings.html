@@ -244,7 +244,10 @@
 					</a>
 				</div>
 			</div>
-			<label ng-show="links.length">Current Links</label>
+			<div>
+				<label ng-show="links.length">Current Links</label>
+				<label ng-show="links.length" style="float:right;margin-right:75px">Conv. Value</label>
+			</div>
 			<div ng-repeat="l in links" class="input-wrap-wide">
 				<div class="input-group">
 					<span class="input-group-addon input-group-primary">
@@ -294,7 +297,7 @@
 			<div class="country-wrap">
 				<label>Countries</label>
 				<div class="country">
-					<div id="map" class="margin-y-10"  style="width: 95%; height: 400px;"></div>
+					<div id="map" class="margin-y-10"  style="width:95%;height:400px"></div>
 					<div class="row">
 						<div class="col-sm-12">
 							<span class="input-group">
