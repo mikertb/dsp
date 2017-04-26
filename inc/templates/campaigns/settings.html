@@ -398,12 +398,12 @@
 	</div>
 
 	<div ng-show="!cform.$valid" class="alert alert-danger">Please complete all fields</div>
-	<input type="submit" ng-disabled="!cform.$valid" class="btn btn-primary"
-		   ng-attr-value="{{ create ? 'Create' : 'Save' }}" />
-	<a class="btn btn-success" ng-click="doImportUserIds()">Import User IDs</a>
 	<a ng-hide="create" class="btn btn-success" data-toggle="tab"
 	   ng-click="changeTab('#sbi-tab')"
-	   data-target="#sbi">Targeting &raquo;</a>
+	   data-target="#sbi">Save &amp; Next</a>
+	<input type="submit" ng-disabled="!cform.$valid" class="btn btn-primary"
+		   ng-attr-value="{{ create ? 'Create' : 'Save' }}" />
+	<a class="btn btn-success disabled" ng-click="doImportUserIds()">Import User IDs</a>
 
 	<div class="modal fade" id="delete-link-modal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">

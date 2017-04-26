@@ -2,33 +2,8 @@
 <form name="tform" ng-model-options="{ getterSetter: true }" novalidate>
 
 	<div class="panel panel-default sbi-new-rule first">
-		<div class="panel-heading">NEW RULE</div>
+		<div class="panel-heading">CREATE A BIDDING RULE</div>
 		<div class="panel-body">
-			<div class="row">
-				<div class="form-group col-sm-8 no-padding-left">
-					<label>Rule Name</label>
-					<input ng-model="rule.name" type="text"
-					       class="form-control input-lg"
-					       placeholder="Name" />
-				</div>
-				<div class="form-group col-sm-4 no-padding-right">
-					<label>Bid Amount</label>
-					<button type="button" class="btn btn-help thelp"
-						data-toggle="tooltip" data-placement="top"
-						title="A bid amount of 0 denotes that if the condition
-						set of the rule are met, that the bid should be ignored.">
-						<i class="fa fa-question"></i>
-					</button>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<i class="fa fa-dollar"></i>
-						</span>
-						<input ng-model="rule.bid" type="number"
-						       class="form-control input-lg"
-						       placeholder="Amount" min="0" />
-					</div>
-				</div>
-			</div>
 			<div class="row">
 				<label>New Condition</label>
 				<button type="button" class="btn btn-help thelp"
@@ -78,6 +53,31 @@
 								</button>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-sm-8 no-padding-left">
+					<label>Rule Name</label>
+					<input ng-model="rule.name" type="text"
+					       class="form-control input-lg"
+					       placeholder="Name" />
+				</div>
+				<div class="form-group col-sm-4 no-padding-right">
+					<label>Bid Amount</label>
+					<button type="button" class="btn btn-help thelp"
+						data-toggle="tooltip" data-placement="top"
+						title="A bid amount of 0 denotes that if the condition
+						set of the rule are met, that the bid should be ignored.">
+						<i class="fa fa-question"></i>
+					</button>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-dollar"></i>
+						</span>
+						<input ng-model="rule.bid" type="number"
+						       class="form-control input-lg"
+						       placeholder="Amount" min="0" />
 					</div>
 				</div>
 			</div>
