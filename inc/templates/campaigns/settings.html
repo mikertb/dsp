@@ -373,7 +373,7 @@
 							   ng-click="campaign.os('windows')"
 							   ng-class="{ 'active': campaign.os() === 'windows' }">
 							<input required type="radio" ng-model="campaign.os" />
-							<i class="fa fa-windows text-primary"></i> Windows
+							<i class="fa fa-windows text-primary"></i> Windows Phone
 						</label>
 						<label class="btn btn-lg btn-default"
 							   ng-click="campaign.os('desktop')"
@@ -385,7 +385,7 @@
 							   ng-click="campaign.os('other')"
 							   ng-class="{ 'active': campaign.os() === 'other' }">
 							<input required type="radio" ng-model="campaign.os" />
-							<i class="fa fa-linux text-warning"></i> Other
+							<i class="fa fa-linux text-warning"></i> All Other OS'es
 						</label>
 					</div>
 					<i ng-show="campaign.os() && campaign.os().length"
