@@ -5565,10 +5565,18 @@ app.controller('campaignTargetingController',
 				$scope.fieldValues = DAYS_OF_WEEK;
 				return;
 			}
+
 			var filt = {};
 			filt[smreport.field.country] = $scope.$parent.campaign.countries();
 			smreport.reportValues(code, filt).success(function (d) {
+
 				$scope.fieldValues = d;
+				
+				// Added for custom Publisher Domain value of 'Unknown';
+				if (code === $scope.fields.pubDomain.code) {
+					$scope.fieldValues.push('unknown'); 
+				}
+
 			}).background().send();
 		};
 
