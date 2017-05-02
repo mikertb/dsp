@@ -4,7 +4,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-12 no-padding-x">
-					<label>Campaign Name</label>
+					<label>Campaign Name</label> <span style="color:red">*</span>
 					<div class="input-group">
 						<input type="text" class="form-control input-lg"
 							   ng-model="campaign.name"
@@ -22,7 +22,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-3 no-padding-x">
-					<label>Total Budget</label>
+					<label>Total Budget</label> <span style="color:red">*</span>
 					<div class="input-group">
 						<span class="input-group-addon">
 							<i class="fa fa-dollar"></i>
@@ -41,7 +41,7 @@
 					</div>
 				</div>
 				<div class="col-md-3 no-padding-x">
-					<label>Daily Budget</label>
+					<label>Daily Budget</label> <span style="color:red">*</span>
 					<div class="input-group">
                                             <span class="input-group-addon">
                                                     <i class="fa fa-dollar"></i>
@@ -109,7 +109,8 @@
 							data-placement="top"
 							title="The default bid that the campaign falls back on, if NO condition-rules are met (set those rules on the next page)">
 						<i class="fa fa-question"></i>
-					</button>
+					</button>&nbsp;
+					<span style="color:red">*</span>
 					<div class="input-group">
 						<span class="input-group-addon input-currency">
 							<i class="fa fa-dollar"></i>
@@ -446,13 +447,14 @@
 					<div class="row">
 						<div class="col-md-5 settings-link-col">
 							<div>
-								<label><span style="color:red">*</span> Link Name (for your reference only)</label> 
+								<label>Link Name (for your reference only)</label> 
 								<button type="button" class="btn btn-help thelp"
 										data-toggle="tooltip"
 										data-placement="top"
 										title="Link name used in reporting">
 									<i class="fa fa-question"></i>
-								</button>
+								</button> 
+								<span style="color:red">*</span>
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
@@ -465,7 +467,7 @@
 						</div>
 						<div class="col-md-4 settings-link-col">
 							<div>
-								<label><span style="color:red">*</span> Actual Adv. Domain</label> 
+								<label>Actual Adv. Domain</label> 
 								<button type="button" class="btn btn-help thelp"
 										data-toggle="tooltip"
 										data-placement="top"
@@ -473,7 +475,8 @@
 									without the leading http://. In case of apps the advertiser domain should be
 									the domain for the app and not the publisher, e.g. clashofclans.com">
 									<i class="fa fa-question"></i>
-								</button>
+								</button> 
+								<span style="color:red">*</span>
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
@@ -507,14 +510,15 @@
 					<div class="row">
 						<div class="col-sm-12 settings-link-col">
 							<div>
-								<label><span style="color:red">*</span> Tracking Link</label> 
+								<label>Tracking Link</label> 
 								<button type="button" class="btn btn-help thelp"
 										data-toggle="tooltip"
 										data-placement="top"
 										title="Destination users sent to when clicking an ad. Please see FAQs for
 									tokens and conversion tracking information.">
 									<i class="fa fa-question"></i>
-								</button>
+								</button> 
+								<span style="color:red">*</span>
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
