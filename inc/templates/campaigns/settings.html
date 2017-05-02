@@ -440,78 +440,90 @@
 							aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title">Add New Link</h4>
+					<h4 class="modal-title">Destination Link</h4>
 				</div>
 				<div class="modal-body">
-					<label>New Destination Link</label>
 					<div class="row">
 						<div class="col-md-5 settings-link-col">
+							<div>
+								<label><span style="color:red">*</span> Link Name (for your reference only)</label> 
+								<button type="button" class="btn btn-help thelp"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Link name used in reporting">
+									<i class="fa fa-question"></i>
+								</button>
+							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-tag"></i>
 								</span>
 								<input type="text" class="form-control input-lg"
 									   ng-model="link.name"
-									   placeholder="*Link name (for reference only)">
-								<span class="input-group-addon input-validation">
-									<button type="button" class="btn btn-help thelp"
-											data-toggle="tooltip"
-											data-placement="top"
-											title="Link name used in reporting">
-										<i class="fa fa-question"></i>
-									</button>
-								</span>
+									   placeholder="My Link">
 							</div>
 						</div>
 						<div class="col-md-4 settings-link-col">
+							<div>
+								<label><span style="color:red">*</span> Actual Adv. Domain</label> 
+								<button type="button" class="btn btn-help thelp"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="The final domain users are sent to when clicking this link,
+									without the leading http://. In case of apps the advertiser domain should be
+									the domain for the app and not the publisher, e.g. clashofclans.com">
+									<i class="fa fa-question"></i>
+								</button>
+							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-globe"></i>
 								</span>
 								<input type="text" class="form-control input-lg"
 									   ng-model="link.adomain"
-									   placeholder="*Actual adv. domain">
-								<span class="input-group-addon input-validation">
-									<button type="button" class="btn btn-help thelp"
-											data-toggle="tooltip"
-											data-placement="top"
-											title="The final domain users are sent to when clicking this link,
-										without the leading http://. In case of apps the advertiser domain should be
-										the domain for the app and not the publisher, e.g. clashofclans.com">
-										<i class="fa fa-question"></i>
-									</button>
-								</span>
+									   placeholder="adv-domain.com">
 							</div>
 						</div>
 						<div class="col-md-3 settings-link-col">
+							<div>
+								<label>Conv. Value</label> 
+								<button type="button" class="btn btn-help thelp"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="The conversion value of this link if tracking profit/loss">
+									<i class="fa fa-question"></i>
+								</button>
+							</div>
 							<div class="input-group">
 								<span class="input-group-addon input-currency">
 									<i class="fa fa-dollar"></i>
 								</span>
 								<input type="number" class="form-control input-lg"
 									   ng-model="link.value"
-									   placeholder="Conv. Value">
-								<span class="input-group-addon input-validation">
-									<button type="button" class="btn btn-help thelp"
-											data-toggle="tooltip"
-											data-placement="top"
-											title="The conversion value of this link if tracking profit/loss">
-										<i class="fa fa-question"></i>
-									</button>
-								</span>
+									   placeholder="1.00">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-12 settings-link-col">
+							<div>
+								<label><span style="color:red">*</span> Tracking Link</label> 
+								<button type="button" class="btn btn-help thelp"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Destination users sent to when clicking an ad. Please see FAQs for
+									tokens and conversion tracking information.">
+									<i class="fa fa-question"></i>
+								</button>
+							</div>
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-link"></i>
 								</span>
 								<input type="text" class="form-control input-lg"
 									   ng-model="link.url"
-									   placeholder="http://adv-domain.com/campaign-link?cid={impid}">
-								<span class="input-group-addon input-validation">
+									   placeholder="http://ad-domain.com/campaign-link?cid={impid}">
+								<!-- <span class="input-group-addon input-validation">
 									<button type="button" class="btn btn-help thelp"
 											data-toggle="tooltip"
 											data-placement="top"
@@ -519,7 +531,7 @@
 										tokens and conversion tracking information.">
 										<i class="fa fa-question"></i>
 									</button>
-								</span>
+								</span> -->
 							</div>
 						</div>
 					</div>
