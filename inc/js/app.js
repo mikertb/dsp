@@ -5573,8 +5573,10 @@ app.controller('campaignTargetingController',
 				$scope.fieldValues = d;
 				
 				// Added for custom Publisher Domain value of 'Unknown';
-				if (code === $scope.fields.pubDomain.code) {
-					$scope.fieldValues.push('unknown'); 
+				if (code === $scope.fields.pubDomain.code || code === $scope.fields.pubName.code || code === $scope.fields.medDomain.code || code === $scope.fields.medName.code || code === $scope.fields.medBundle.code) {
+					$scope.fieldValues.push('null');
+					$scope.fieldValues.push('unknown');
+					$scope.fieldValues.push('Unknown');
 				}
 
 			}).background().send();
